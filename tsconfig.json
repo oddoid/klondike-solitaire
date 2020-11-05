@@ -13,7 +13,7 @@
     "outDir": "dist",
     "target": "ES6",
 
-    // Emit type definitions (.d.ts) for consumers.
+    // Emit type definitions (.d.ts) for clients.
     "declarationDir": "dist",
     "declaration": true,
 
