@@ -1,0 +1,17 @@
+{
+  "name": "chillygem",
+  "author": "oddoid",
+  "version": "0.0.0",
+  "license": "GPL-3.0-only",
+  "description": "Klondike Solitaire game logic library.",
+  "keywords": [
+    "klondike",
+    "solitaire",
+    "patience",
+    "game",
+    "windows"
+  ],
+  "homepage": "https://github.com/oddoid/chillygem",
+  "repository": "github:oddoid/chillygem",
+  "bugs": "https://github.com/oddoid/chillygem/issues"
+}
