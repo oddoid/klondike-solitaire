@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "Node",
+
+    // Maximize type checking.
+    "resolveJsonModule": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "outDir": "dist",
+    "target": "ES6",
+
+    // Emit type definitions (.d.ts) for consumers.
+    "declarationDir": "dist",
+    "declaration": true,
+
+    "sourceMap": true,
+
+    "incremental": true
+  }
+}

@@ -14,13 +14,18 @@
   "homepage": "https://github.com/oddoid/chillygem",
   "repository": "github:oddoid/chillygem",
   "bugs": "https://github.com/oddoid/chillygem/issues",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "start": "rm -rf dist && tsc -w",
+    "build": "rm -rf dist && tsc",
     "test": "npm -s run formatter -- -l",
     "format": "npm -s run formatter -- -w",
     "formatter": "prettier --loglevel warn './**/*.{json,md,ts}'"
   },
   "devDependencies": {
     "pre-commit": "1.2.2",
-    "prettier": "2.1.2"
+    "prettier": "2.1.2",
+    "typescript": "4.1.1-rc"
   }
 }
