@@ -48,11 +48,11 @@ export namespace Foundation {
     return !!base && succeeds(top, base)
   }
 
-  /** Test whether the foundation is complete. */
+  /** Test whether one or more pillars are complete. */
   export function isBuilt(
-    ...foundations: readonly (readonly Readonly<Card>[])[]
+    ...pillars: readonly (readonly Readonly<Card>[])[]
   ): boolean {
-    return foundations.every(foundation => isPillarBuilt(foundation))
+    return pillars.every(foundation => isPillarBuilt(foundation))
   }
 
   /**
@@ -74,7 +74,7 @@ export namespace Foundation {
     )
   }
 
-  function isPillarBuilt(foundation: readonly Readonly<Card>[]): boolean {
-    return foundation[foundation.length - 1]?.rank === 'king'
+  function isPillarBuilt(pillar: readonly Readonly<Card>[]): boolean {
+    return pillar[pillar.length - 1]?.rank === 'king'
   }
 }
