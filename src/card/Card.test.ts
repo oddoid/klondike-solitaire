@@ -41,11 +41,11 @@ test.each(<const>[
     ],
     '🂠🃂🂠🂤'
   ]
-])('toString %# %s: %p', (_, directed, cards, expected) =>
+])('toString %s', (_, directed, cards, expected) =>
   expect(Card.toString(directed, ...cards)).toStrictEqual(expected)
 )
 
-test.each(Deck.make('up'))('fromString %#: %p', card =>
+test.each(Deck.make('up'))('fromString %p', card =>
   expect(Card.fromString(Card.toString(true, card))).toStrictEqual(card)
 )
 

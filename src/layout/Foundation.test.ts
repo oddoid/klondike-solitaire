@@ -5,7 +5,7 @@ test.each([
   ['empty', '', '🃑', '🃑'],
   ['nonempty', '🃑', '🃒', '🃑🃒'],
   ['almost built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', '🃞', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞']
-])('build buildable %# %s: %p', (_, foundationStr, pileStr, expected) => {
+])('build buildable %s', (_, foundationStr, pileStr, expected) => {
   const foundation = Foundation.make()
   foundation.clubs.push(
     ...[...foundationStr].map(card => Card.fromString(card))
@@ -26,7 +26,7 @@ test.each([
   ['nonempty and non-matching suit', '🃑', '🃂', '🃑'],
   ['nonempty and non-sequential rank', '🃑', '🃓', '🃑'],
   ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞']
-])('build non-buildable %# %s: %p', (_, foundationStr, pileStr, expected) => {
+])('build non-buildable %s', (_, foundationStr, pileStr, expected) => {
   const foundation = Foundation.make()
   foundation.clubs.push(
     ...[...foundationStr].map(card => Card.fromString(card))
@@ -58,7 +58,7 @@ test.each([
   ['singular', '🃑', false],
   ['not built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', false],
   ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true]
-])('isBuilt %# %s: %p', (_, foundation, built) =>
+])('isBuilt %s', (_, foundation, built) =>
   expect(
     Foundation.isBuilt([...foundation].map(card => Card.fromString(card)))
   ).toStrictEqual(built)
@@ -68,7 +68,7 @@ test.each([
   ['empty', '', '', ''],
   ['singular', '🃑', '', '🃑'],
   ['multiple', '🃑🃒', '🃑', '🃒']
-])('worry %# %s: %p', (_, foundationStr, expectedFoundation, expectedCard) => {
+])('worry %s', (_, foundationStr, expectedFoundation, expectedCard) => {
   const foundation = [...foundationStr].map(card => Card.fromString(card))
   const top = Foundation.worry(foundation)
   expect(foundation).toStrictEqual(
