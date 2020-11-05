@@ -22,7 +22,11 @@
     "test:unit": "jest",
     "test": "npm -s run formatter -- -l && npm -s run test:unit",
     "format": "npm -s run formatter -- -w",
-    "formatter": "prettier --loglevel warn './**/*.{json,md,ts}'"
+    "formatter": "prettier --loglevel warn './**/*.{json,md,ts}'",
+    "preversion": "[ -z \"$(git status -z)\" ]",
+    "version": "npm run build && npm t",
+    "postversion": "npm publish",
+    "prepublishOnly": "git push --follow-tags"
   },
   "devDependencies": {
     "jest": "26.6.3",
