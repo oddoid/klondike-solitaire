@@ -12,7 +12,7 @@ game logic library.
 <!-- code_chunk_output -->
 
 - [Table of Contents](#table-of-contents)
-- [Installation](#installation)
+- [Installation and version history](#installation-and-version-history)
 - [API and Usage](#api-and-usage)
 - [Rules](#rules)
 - [License](#license)
@@ -20,15 +20,15 @@ game logic library.
 
 <!-- /code_chunk_output -->
 
-## Installation
+## Installation and version history
 
 Install the library:
 
 ```bash
-npm i --save-prefix= <LIBRARY NAME>
+npm i --save-prefix= chillygem
 ```
 
-<!-- [todo] add library name. See the [changelog](changelog.md) for release notes. -->
+See the [changelog](changelog.md) for release notes.
 
 ## API and Usage
 
