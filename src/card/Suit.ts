@@ -18,9 +18,9 @@ export namespace Suit {
   }
 
   /**
-   * The contiguous relative ordering of each suit.
+   * The contiguous [relative ordering] of each suit.
    *
-   * https://en.wikipedia.org/wiki/High_card_by_suit
+   * [relative ordering]: https://en.wikipedia.org/wiki/High_card_by_suit
    */
   export const toOrder = Object.values(Type).reduce(
     (order, value, index) => ({...order, [value]: index}),

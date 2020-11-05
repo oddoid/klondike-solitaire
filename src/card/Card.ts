@@ -5,7 +5,9 @@ import {Suit} from './Suit'
 export type Card = {suit: Suit.Type; rank: Rank.Type; direction: Card.Direction}
 
 export namespace Card {
-  /** See https://en.wikipedia.org/wiki/Standard_52-card_deck#Unicode. */
+  /**
+   * [Playing Cards Unicode range](https://en.wikipedia.org/wiki/Standard_52-card_deck#Unicode).
+   */
   const unicode = {rangeStart: 0x1f0a0, rankSize: 16, suitMax: 3}
 
   /**
