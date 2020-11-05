@@ -3,11 +3,10 @@ import {Rank} from '../card/Rank'
 import {Suit} from '../card/Suit'
 
 /**
- * One pillar pile per suit. The number of piles are fixed and distinct.
- * The pillars are initially empty and building them is the objective.
- * Consecutive ranks are built in ascending order from ace to king within a
- * suit, squared and face-up. By convention, the top of a pile is the last
- * index.
+ * One pillar pile per suit. The number of piles are fixed and distinct. The
+ * pillars are initially empty and building them is the objective. Consecutive
+ * ranks are built in ascending order from ace to king within a suit, squared
+ * and face-up. By convention, the top of a pile is the last index.
  *
  * This data can also be modeled as a `readonly Card[][]` but doing so would
  * allow the suit pillar position to change within the array.
@@ -23,29 +22,33 @@ export namespace Foundation {
     )
   }
 
-  // [todo] what about when re-building a worry card? This would not be in a
-  // pile so the client might drop it mistakenly on a failed build. Use errors
-  // again?
-  export function build(foundation: Foundation, pile: Readonly<Card>[]): void {
-    const top = pile[pile.length - 1]
-    if (!top || !isBuildable(foundation, pile)) return
-    pile.length--
-    foundation[top.suit].push(top) // not encapsualted!
+  /**
+   * Add a card to a foundation pillar. An error is thrown if the card cannot be
+   * built to force the client to handle the error scenario. If the error
+   * scenario were unhandled, the card might be dropped. The client can call
+   * `isBuildable()` first to ensure an error will not be thrown and to properly
+   * handle the case where the foundation cannot be built with the card.
+   */
+  export function build(foundation: Foundation, card: Readonly<Card>): void {
+    if (!isBuildable(foundation, card))
+      throw new Error(
+        `${Card.toString(true, card)} cannot be built on foundation.`
+      )
+    foundation[card.suit].push(card) // not encapsualted!
   }
 
   /** Test whether a pile's top card can be built on foundation pile. */
   export function isBuildable(
     foundation: Foundation,
-    pile: readonly Readonly<Card>[]
+    card: Readonly<Card>
   ): boolean {
-    const top = pile[pile.length - 1]
-    if (!top || top.direction === 'down') return false
+    if (card.direction === 'down') return false
 
     // Only aces are permitted as the base card.
-    if (!foundation[top.suit].length && top.rank === 'ace') return true
+    if (!foundation[card.suit].length && card.rank === 'ace') return true
 
-    const base = foundation[top.suit][foundation[top.suit].length - 1]
-    return !!base && succeeds(top, base)
+    const base = foundation[card.suit][foundation[card.suit].length - 1]
+    return !!base && succeeds(card, base)
   }
 
   /** Test whether one or more pillars are complete. */
@@ -69,6 +72,7 @@ export namespace Foundation {
    */
   function succeeds(left: Readonly<Card>, right: Readonly<Card>): boolean {
     return (
+      // this isn't really needed now that the division of pillars is in place
       Suit.toColor[left.suit] === Suit.toColor[right.suit] &&
       Rank.toOrder[left.rank] === Rank.toOrder[right.rank] + 1
     )

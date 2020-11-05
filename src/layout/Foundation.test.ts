@@ -5,14 +5,14 @@ test.each([
   ['empty', '', '🃑', '🃑'],
   ['nonempty', '🃑', '🃒', '🃑🃒'],
   ['almost built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', '🃞', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞']
-])('build buildable %s', (_, foundationStr, pileStr, expected) => {
+])('build buildable %s', (_, foundationStr, cardStr, expected) => {
   const foundation = Foundation.make()
   foundation.clubs.push(
     ...[...foundationStr].map(card => Card.fromString(card))
   )
-  const pile = [...pileStr].map(card => Card.fromString(card))
-  expect(Foundation.isBuildable(foundation, pile)).toStrictEqual(true)
-  Foundation.build(foundation, pile)
+  const card = Card.fromString(cardStr)
+  expect(Foundation.isBuildable(foundation, card)).toStrictEqual(true)
+  Foundation.build(foundation, card)
   expect(foundation).toStrictEqual({
     clubs: [...expected].map(card => Card.fromString(card)),
     diamonds: [],
@@ -22,35 +22,26 @@ test.each([
 })
 
 test.each([
-  ['empty and non-ace', '', '🃒', ''],
-  ['nonempty and non-matching suit', '🃑', '🃂', '🃑'],
-  ['nonempty and non-sequential rank', '🃑', '🃓', '🃑'],
-  ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞']
-])('build non-buildable %s', (_, foundationStr, pileStr, expected) => {
+  ['empty and non-ace', '', '🃒'],
+  ['nonempty and non-matching suit', '🃑', '🃂'],
+  ['nonempty and non-sequential rank', '🃑', '🃓'],
+  ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑']
+])('build non-buildable %s', (_, foundationStr, cardStr) => {
   const foundation = Foundation.make()
   foundation.clubs.push(
     ...[...foundationStr].map(card => Card.fromString(card))
   )
-  const pile = [...pileStr].map(card => Card.fromString(card))
-  expect(Foundation.isBuildable(foundation, pile)).toStrictEqual(false)
-  Foundation.build(foundation, pile)
-  expect(foundation).toStrictEqual({
-    clubs: [...expected].map(card => Card.fromString(card)),
-    diamonds: [],
-    hearts: [],
-    spades: []
-  })
+  const card = Card.fromString(cardStr)
+  expect(Foundation.isBuildable(foundation, card)).toStrictEqual(false)
+  expect(() => Foundation.build(foundation, card)).toThrowError()
 })
 
 test('build card down', () => {
   const foundation = Foundation.make()
   foundation.clubs.push(...[...'🃑🃒🃓'].map(card => Card.fromString(card)))
-  const pile = [Card.fromString('🃔', 'down')]
-  expect(Foundation.isBuildable(foundation, pile)).toStrictEqual(false)
-  Foundation.build(foundation, pile)
-  expect(foundation.clubs).toStrictEqual(
-    [...'🃑🃒🃓'].map(card => Card.fromString(card))
-  )
+  const card = Card.fromString('🃔', 'down')
+  expect(Foundation.isBuildable(foundation, card)).toStrictEqual(false)
+  expect(() => Foundation.build(foundation, card)).toThrowError()
 })
 
 test.each([
