@@ -6,9 +6,8 @@ export namespace Deck {
   /** Generate a complete pack of 52, face down, and ordered cards. */
   export function make(direction: Card.Direction = 'down'): Card[] {
     const deck = []
-    for (const suit of Object.values(Suit.Type))
-      for (const rank of Object.values(Rank.Type))
-        deck.push({suit, rank, direction})
+    for (const suit of Suit.values)
+      for (const rank of Rank.values) deck.push({suit, rank, direction})
     return deck
   }
 }

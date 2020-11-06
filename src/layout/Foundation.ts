@@ -11,12 +11,12 @@ import {Suit} from '../card/Suit'
  * This data can also be modeled as a `readonly Card[][]` but doing so would
  * allow the suit pillar position to change within the array.
  */
-export type Foundation = Readonly<Record<Suit.Type, Card[]>>
+export type Foundation = Readonly<Record<Suit, Card[]>>
 
 export namespace Foundation {
   /** Create a set of foundation pillars. */
   export function make(): Foundation {
-    return Object.values(Suit.Type).reduce(
+    return Suit.values.reduce(
       (foundation, suit) => ({...foundation, [suit]: []}),
       <Foundation>{}
     )
