@@ -20,11 +20,11 @@
     "start": "rm -rf dist && tsc -w",
     "build": "rm -rf dist && tsc",
     "test:unit": "jest",
-    "test": "npm -s run formatter -- -l && npm -s run test:unit",
+    "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit",
     "format": "npm -s run formatter -- -w",
     "formatter": "prettier --loglevel warn './**/*.{json,md,ts}'",
     "preversion": "[ -z \"$(git status -z)\" ]",
-    "version": "npm run build && npm t",
+    "version": "npm t",
     "postversion": "npm publish",
     "prepublishOnly": "git push --follow-tags"
   },
