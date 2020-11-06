@@ -51,7 +51,7 @@ test.each([
   ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true]
 ])('isBuilt %s', (_, foundation, built) =>
   expect(
-    Foundation.isBuilt([...foundation].map(card => Card.fromString(card)))
+    Foundation.isPillarBuilt([...foundation].map(card => Card.fromString(card)))
   ).toStrictEqual(built)
 )
 
