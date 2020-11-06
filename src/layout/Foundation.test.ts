@@ -12,7 +12,7 @@ test.each([
   )
   const card = Card.fromString(cardStr)
   expect(Foundation.isBuildable(foundation, card)).toStrictEqual(true)
-  Foundation.build(foundation, card)
+  Foundation.tryBuild(foundation, card)
   expect(foundation).toStrictEqual({
     clubs: [...expected].map(card => Card.fromString(card)),
     diamonds: [],
@@ -33,7 +33,7 @@ test.each([
   )
   const card = Card.fromString(cardStr)
   expect(Foundation.isBuildable(foundation, card)).toStrictEqual(false)
-  expect(() => Foundation.build(foundation, card)).toThrowError()
+  expect(() => Foundation.tryBuild(foundation, card)).toThrowError()
 })
 
 test('build card down', () => {
@@ -41,7 +41,7 @@ test('build card down', () => {
   foundation.clubs.push(...[...'🃑🃒🃓'].map(card => Card.fromString(card)))
   const card = Card.fromString('🃔', 'down')
   expect(Foundation.isBuildable(foundation, card)).toStrictEqual(false)
-  expect(() => Foundation.build(foundation, card)).toThrowError()
+  expect(() => Foundation.tryBuild(foundation, card)).toThrowError()
 })
 
 test.each([
@@ -51,7 +51,7 @@ test.each([
   ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true]
 ])('isBuilt %s', (_, foundation, built) =>
   expect(
-    Foundation.isPillarBuilt([...foundation].map(card => Card.fromString(card)))
+    Foundation.isPileBuilt([...foundation].map(card => Card.fromString(card)))
   ).toStrictEqual(built)
 )
 

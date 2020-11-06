@@ -3,18 +3,18 @@ import {Rank} from '../card/Rank'
 import {Suit} from '../card/Suit'
 
 /**
- * One pillar pile per suit. The number of pillars are fixed and distinct. Each
- * pillar is initially empty and building them is the objective. Consecutive
- * ranks are built in ascending order from ace to king within a suit, squared,
- * and face-up. By convention, the top of a pile is the last index.
+ * One pile per suit. The number of piles are fixed and distinct. Each pile is
+ * initially empty and building them is the objective. Consecutive ranks are
+ * built in ascending order from ace to king within a suit, squared, and
+ * face-up. By convention, the top of a pile is the last index.
  *
  * This data can also be modeled as a `readonly Card[][]` but doing so would
- * allow the suit pillar positions to change within the array.
+ * allow the suit pile positions to change within the array.
  */
 export type Foundation = Readonly<Record<Suit, Card[]>>
 
 export namespace Foundation {
-  /** Create a set of foundation pillars. */
+  /** Create a set of foundation piles. */
   export function make(): Foundation {
     return Suit.values.reduce(
       (foundation, suit) => ({...foundation, [suit]: []}),
@@ -23,14 +23,15 @@ export namespace Foundation {
   }
 
   /**
-   * Add a card to a foundation pillar. Invoke `isBuildable()` first to verify
+   * Add a card to a foundation pile. Invoke `isBuildable()` first to verify
    * the card is buildable.
    *
    * An error is thrown if the card cannot be built to force the client to
    * handle when a card cannot be built. If the unbuildable scenario were
    * unhandled, the card might be dropped.
    */
-  export function build(foundation: Foundation, card: Readonly<Card>): void {
+  // expose pile, not foundation, for collided thingy
+  export function tryBuild(foundation: Foundation, card: Readonly<Card>): void {
     if (!isBuildable(foundation, card))
       throw new Error(
         `${Card.toString(true, card)} cannot be built on foundation.`
@@ -48,29 +49,29 @@ export namespace Foundation {
     // Only aces are permitted as the base card.
     if (!foundation[card.suit].length && card.rank === 'ace') return true
 
-    const pillar = foundation[card.suit]
-    const base = pillar[pillar.length - 1]
-    return !!base && succeeds(card, base)
+    const pile = foundation[card.suit]
+    const top = pile[pile.length - 1]
+    return !!top && succeeds(card, top)
   }
 
   /** Test whether the foundation is complete. */
   export function isBuilt(foundation: Foundation): boolean {
-    return isPillarBuilt(...Object.values(foundation))
+    return isPileBuilt(...Object.values(foundation))
   }
 
-  /** Test whether one or more pillars are complete. */
-  export function isPillarBuilt(
-    ...pillars: readonly (readonly Readonly<Card>[])[]
+  /** Test whether one or more piles are complete. */
+  export function isPileBuilt(
+    ...piles: readonly (readonly Readonly<Card>[])[]
   ): boolean {
-    return pillars.every(pillar => pillar[pillar.length - 1]?.rank === 'king')
+    return piles.every(pile => pile[pile.length - 1]?.rank === 'king')
   }
 
   /**
    * Remove the top card for insertion back into a tableau. If the card is not
    * worried, it should be rebuilt.
    */
-  export function worry(pillar: Readonly<Card>[]): Card | undefined {
-    return pillar.pop()
+  export function worry(pile: Readonly<Card>[]): Card | undefined {
+    return pile.pop()
   }
 
   /**
