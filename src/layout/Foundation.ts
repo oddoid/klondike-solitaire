@@ -75,12 +75,12 @@ export namespace Foundation {
   }
 
   /**
-   * Tests whether left directly succeeds right. True when colors match and the
+   * Tests whether left directly succeeds right. True when suits match and the
    * rank is the next greater adjacent.
    */
   function succeeds(left: Readonly<Card>, right: Readonly<Card>): boolean {
     return (
-      Suit.toColor[left.suit] === Suit.toColor[right.suit] &&
+      left.suit === right.suit &&
       Rank.toOrder[left.rank] === Rank.toOrder[right.rank] + 1
     )
   }

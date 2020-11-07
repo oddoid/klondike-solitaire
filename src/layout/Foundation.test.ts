@@ -23,7 +23,7 @@ test.each([
 
 test.each([
   ['empty and non-ace', '', '🃒'],
-  ['nonempty and non-matching suit', '🃑', '🃂'],
+  ['nonempty and non-matching suit', '🃑', '🂢'],
   ['nonempty and non-sequential rank', '🃑', '🃓'],
   ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑']
 ])('build non-buildable %s', (_, foundationStr, cardStr) => {
