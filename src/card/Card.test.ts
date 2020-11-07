@@ -52,6 +52,8 @@ test.each(Deck.make('up'))('fromString %p', card =>
 test('fromString unknown', () =>
   expect(() => Card.fromString('A')).toThrowError())
 
+test('fromString empty', () => expect(() => Card.fromString('')).toThrowError())
+
 test('fromString down', () =>
   expect(Card.fromString('🃑', 'down')).toStrictEqual({
     suit: 'clubs',
