@@ -45,11 +45,37 @@ test('build card down', () => {
 })
 
 test.each([
+  ['empty', Foundation.make(), false],
+  [
+    'partly',
+    {
+      clubs: [Card.fromString('🃑')],
+      diamonds: [Card.fromString('🃁')],
+      hearts: [Card.fromString('🂱')],
+      spades: [Card.fromString('🂡')]
+    },
+    false
+  ],
+  [
+    'built',
+    {
+      clubs: [...'🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞'].map(card => Card.fromString(card)),
+      diamonds: [...'🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋🃍🃎'].map(card => Card.fromString(card)),
+      hearts: [...'🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂽🂾'].map(card => Card.fromString(card)),
+      spades: [...'🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮'].map(card => Card.fromString(card))
+    },
+    true
+  ]
+])('isBuilt %s', (_, foundation, built) =>
+  expect(Foundation.isBuilt(foundation)).toStrictEqual(built)
+)
+
+test.each([
   ['empty', '', false],
   ['singular', '🃑', false],
   ['not built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', false],
   ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true]
-])('isBuilt %s', (_, foundation, built) =>
+])('isPileBuilt %s', (_, foundation, built) =>
   expect(
     Foundation.isPileBuilt([...foundation].map(card => Card.fromString(card)))
   ).toStrictEqual(built)
