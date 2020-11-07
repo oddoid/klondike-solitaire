@@ -6,10 +6,7 @@ export namespace ObjectUtil {
     object: Readonly<ReversibleRecord<T>>
   ): ReverseRecord<T> {
     return Object.entries<keyof any & T[keyof T]>(object).reduce(
-      (reversed, [key, value]) => ({
-        ...reversed,
-        [value]: key
-      }),
+      (reversed, [key, value]) => ({...reversed, [value]: key}),
       <ReverseRecord<T>>{}
     )
   }
