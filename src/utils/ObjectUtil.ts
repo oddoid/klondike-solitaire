@@ -5,10 +5,10 @@ export namespace ObjectUtil {
   export function reverseRecord<T>(
     object: Readonly<ReversibleRecord<T>>
   ): ReverseRecord<T> {
-    return Object.entries(object).reduce(
+    return Object.entries<keyof any & T[keyof T]>(object).reduce(
       (reversed, [key, value]) => ({
         ...reversed,
-        [<keyof ReverseRecord<T>>value]: key
+        [value]: key
       }),
       <ReverseRecord<T>>{}
     )
