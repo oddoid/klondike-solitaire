@@ -2,7 +2,11 @@ import {Rank} from './Rank'
 import {Suit} from './Suit'
 
 /** A playing card. */
-export type Card = {suit: Suit; rank: Rank; direction: Card.Direction}
+export type Card = {
+  readonly suit: Suit
+  readonly rank: Rank
+  direction: Card.Direction
+}
 
 export namespace Card {
   /**
