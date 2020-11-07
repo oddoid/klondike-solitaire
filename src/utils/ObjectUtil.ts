@@ -5,27 +5,12 @@ export namespace ObjectUtil {
   export function reverseRecord<T>(
     object: Readonly<ReversibleRecord<T>>
   ): ReverseRecord<T> {
-    return entries(object).reduce(
-      (reversed, [key, value]) => ({...reversed, [value]: key}),
+    return Object.entries(object).reduce(
+      (reversed, [key, value]) => ({
+        ...reversed,
+        [<keyof ReverseRecord<T>>value]: key
+      }),
       <ReverseRecord<T>>{}
     )
-  }
-
-  /**
-   * Report all enumerable keys not in the prototype.
-   *
-   * https://github.com/Microsoft/TypeScript/pull/12253
-   */
-  export function keys<T>(object: Readonly<T & object>): (keyof T)[] {
-    const keys = []
-    for (const key in object) if (object.hasOwnProperty(key)) keys.push(key)
-    return keys
-  }
-
-  // https://github.com/Microsoft/TypeScript/pull/12253
-  export function entries<T>(
-    object: Readonly<T & object>
-  ): [keyof T, T[keyof T]][] {
-    return keys(object).map(key => [key, object[key]!])
   }
 }
