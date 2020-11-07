@@ -17,7 +17,6 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "rm -rf dist && tsc -w",
     "build": "rm -rf dist && tsc",
     "test:unit": "jest",
     "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit",
