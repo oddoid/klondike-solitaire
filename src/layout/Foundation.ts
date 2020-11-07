@@ -76,7 +76,7 @@ export namespace Foundation {
 
   /**
    * Tests whether left directly succeeds right. True when colors match and the
-   * rank is the next lesser adjacent.
+   * rank is the next greater adjacent.
    */
   function succeeds(left: Readonly<Card>, right: Readonly<Card>): boolean {
     return (
