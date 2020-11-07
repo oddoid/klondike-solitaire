@@ -37,6 +37,7 @@ export namespace Tableau {
 
   // [todo] who coordinates the foundation and the pile? to make sure it can be accepted.
   export function play(pile: Readonly<Card>[]): Card | undefined {
+    if (pile[pile.length - 1]?.direction !== 'up') return
     return pile.pop()
   }
 
@@ -59,7 +60,7 @@ export namespace Tableau {
   }
 
   /** Test whether a card can be built on tableau pile. */
-  function isBuildable(
+  export function isBuildable(
     pile: readonly Readonly<Card>[],
     card: Readonly<Card>
   ): boolean {
@@ -67,7 +68,7 @@ export namespace Tableau {
     if (top?.direction === 'down' || card.direction === 'down') return false
 
     // Empty lanes accept only kings.
-    if (!top && card.rank !== 'king') return false
+    if (!top && card.rank === 'king') return true
 
     return !!top && succeeds(card, top)
   }
