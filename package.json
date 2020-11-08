@@ -1,5 +1,5 @@
 {
-  "name": "chillygem",
+  "name": "klondike-solitaire",
   "author": "oddoid",
   "version": "0.0.0",
   "license": "GPL-3.0-only",
@@ -12,9 +12,9 @@
     "game",
     "windows"
   ],
-  "homepage": "https://github.com/oddoid/chillygem",
-  "repository": "github:oddoid/chillygem",
-  "bugs": "https://github.com/oddoid/chillygem/issues",
+  "homepage": "https://github.com/oddoid/klondike-solitaire",
+  "repository": "github:oddoid/klondike-solitaire",
+  "bugs": "https://github.com/oddoid/klondike-solitaire/issues",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

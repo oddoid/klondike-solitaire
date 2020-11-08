@@ -25,7 +25,7 @@ game logic library.
 Install the library:
 
 ```bash
-npm i --save-prefix= chillygem
+npm i --save-prefix= klondike-solitaire
 ```
 
 See the [changelog](changelog.md) for release notes.
