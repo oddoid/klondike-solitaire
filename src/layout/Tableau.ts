@@ -3,14 +3,17 @@ import {Rank} from '../card/Rank'
 import {Suit} from '../card/Suit'
 
 /**
+ *
  * The playing field consists of a tableau of piles that can be maneuvered to
- * expose cards for building the foundations out. The first pile has one card
+ * expose cards for building out the foundations. The first pile has one card
  * and each subsequent pile has one card more than one prior. The top card of
  * each pile can be revealed and cascade downwards in descending order from king
  * to ace using cards from the hand or other piles. Sequences can be moved other
  * piles or foundations. When all revealed cards are removed, the topmost card
  * be revealed.
  */
+export type Tableau = readonly Card[][]
+
 export namespace Tableau {
   /**
    * Draw cards from the stock and create the specified number of piles. Each
@@ -19,7 +22,7 @@ export namespace Tableau {
    * of cards used is the lesser of `piles * (piles + 1) / 2` and
    * `stock.length`.
    */
-  export function make(stock: Card[]): readonly Card[][] {
+  export function make(stock: Card[]): Tableau {
     const tableau = []
     for (let n = 1; n <= 7; n++) {
       const pile = stock.splice(-n)
