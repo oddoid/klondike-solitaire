@@ -10,7 +10,7 @@ export type Card = {
 
 export namespace Card {
   /**
-   * [Playing Cards Unicode range](https://en.wikipedia.org/wiki/Standard_52-card_deck#Unicode).
+   * [Playing Cards Unicode range](https://en.wikipedia.org/wiki/Playing_cards_in_Unicode).
    */
   const unicode = <const>{rangeStart: 0x1f0a0, rankSize: 16, suitMax: 3}
 
