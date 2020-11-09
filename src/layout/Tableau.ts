@@ -3,7 +3,6 @@ import {Rank} from '../card/Rank'
 import {Suit} from '../card/Suit'
 
 /**
- *
  * The playing field consists of a tableau of piles that can be maneuvered to
  * expose cards for building out the foundations. The first pile has one card
  * and each subsequent pile has one card more than one prior. The top card of
@@ -24,8 +23,8 @@ export namespace Tableau {
    */
   export function make(stock: Card[]): Tableau {
     const tableau = []
-    for (let n = 1; n <= 7; n++) {
-      const pile = stock.splice(-n)
+    for (let i = 1; i <= 7; i++) {
+      const pile = stock.splice(-i)
       for (const card of pile) card.direction = 'down'
       tableau.push(pile)
     }
