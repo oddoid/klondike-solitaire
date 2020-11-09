@@ -12,7 +12,7 @@
     "game",
     "windows"
   ],
-  "homepage": "https://github.com/oddoid/klondike-solitaire",
+  "homepage": "https://git.io/klondike",
   "repository": "github:oddoid/klondike-solitaire",
   "bugs": "https://github.com/oddoid/klondike-solitaire/issues",
   "main": "dist/index.js",
