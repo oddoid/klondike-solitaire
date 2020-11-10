@@ -1,3 +1,4 @@
+import {Direction} from './Direction'
 import {Rank} from './Rank'
 import {Suit} from './Suit'
 
@@ -5,7 +6,7 @@ import {Suit} from './Suit'
 export type Card = {
   readonly suit: Suit
   readonly rank: Rank
-  direction: Card.Direction
+  direction: Direction
 }
 
 export namespace Card {
@@ -13,14 +14,6 @@ export namespace Card {
    * [Playing Cards Unicode range](https://en.wikipedia.org/wiki/Playing_cards_in_Unicode).
    */
   const unicode = <const>{rangeStart: 0x1f0a0, rankSize: 16, suitMax: 3}
-
-  /**
-   * The physical orientation of the card. All card backs are identical and
-   * occlude the fronts. The front, or face, shows the card suit and rank. Each
-   * card has a unique suit-rank identity that is secret when hidden and known
-   * when visible.
-   */
-  export type Direction = 'down' | 'up'
 
   /** Unicode to Card adapter. Only face-up codes are supported. */
   export function fromString(code: string, direction: Direction = 'up'): Card {

@@ -11,7 +11,7 @@ import {Suit} from '../card/Suit'
  * This data can also be modeled as a `readonly Card[][]` but doing so would
  * allow the suit pile positions to change within the array.
  */
-export type Foundation = Readonly<Record<Suit, Card[]>>
+export type Foundation = Readonly<Record<Suit, Readonly<Card>[]>>
 
 export namespace Foundation {
   /** Create a set of foundation piles. */
@@ -30,7 +30,7 @@ export namespace Foundation {
    * handle when a card cannot be built. If the unbuildable scenario were
    * unhandled, the card might be dropped.
    */
-  // expose pile, not foundation, for collided thingy
+  // [todo] expose pile, not Foundation, for testing collision success?
   export function tryBuild(foundation: Foundation, card: Readonly<Card>): void {
     if (!isBuildable(foundation, card))
       throw new Error(

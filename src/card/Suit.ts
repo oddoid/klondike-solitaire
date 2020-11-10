@@ -1,3 +1,4 @@
+import {Color} from './Color'
 import {ObjectUtil} from '../utils/ObjectUtil'
 
 /** Pip category. */
@@ -5,9 +6,6 @@ export type Suit = typeof Suit.values[number]
 
 export namespace Suit {
   export const values = <const>['clubs', 'diamonds', 'hearts', 'spades']
-
-  /** Suit primary hue. */
-  export type Color = 'black' | 'red'
 
   /**
    * The contiguous [relative ordering] of each suit.
