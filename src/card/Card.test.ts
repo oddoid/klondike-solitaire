@@ -49,10 +49,9 @@ test.each(Deck.make('up'))('fromString %p', card =>
   expect(Card.fromString(Card.toString(true, card))).toStrictEqual(card)
 )
 
-test('fromString unknown', () =>
-  expect(() => Card.fromString('A')).toThrowError())
+test('fromString unknown', () => expect(() => Card.fromString('A')).toThrow())
 
-test('fromString empty', () => expect(() => Card.fromString('')).toThrowError())
+test('fromString empty', () => expect(() => Card.fromString('')).toThrow())
 
 test('fromString down', () =>
   expect(Card.fromString('🃑', 'down')).toStrictEqual({

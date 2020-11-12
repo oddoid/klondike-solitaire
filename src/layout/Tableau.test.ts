@@ -109,19 +109,19 @@ test.each([
   if (pile.length) pile[pile.length - 1]!.direction = 'up'
   const card = Card.fromString(cardStr)
   expect(Tableau.isBuildable(pile, card)).toStrictEqual(false)
-  expect(() => Tableau.tryBuild(pile, card)).toThrowError()
+  expect(() => Tableau.tryBuild(pile, card)).toThrow()
 })
 
 test('build card down', () => {
   const pile = [...'🃞🃍🃛'].map(card => Card.fromString(card))
   const card = Card.fromString('🃊', 'down')
   expect(Tableau.isBuildable(pile, card)).toStrictEqual(false)
-  expect(() => Tableau.tryBuild(pile, card)).toThrowError()
+  expect(() => Tableau.tryBuild(pile, card)).toThrow()
 })
 
 test('build pile down', () => {
   const pile = [...'🃞🃍🃛'].map(card => Card.fromString(card, 'down'))
   const card = Card.fromString('🃊')
   expect(Tableau.isBuildable(pile, card)).toStrictEqual(false)
-  expect(() => Tableau.tryBuild(pile, card)).toThrowError()
+  expect(() => Tableau.tryBuild(pile, card)).toThrow()
 })
