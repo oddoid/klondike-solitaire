@@ -1,4 +1,4 @@
-# 🂡 Klondike Solitaire
+# 🂮 [Klondike Solitaire](https://git.io/klondike)
 
 **[Klondike Solitaire](<https://en.wikipedia.org/wiki/Klondike_(solitaire)>)**
 game logic library.
