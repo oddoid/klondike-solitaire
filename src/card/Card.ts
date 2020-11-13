@@ -2,7 +2,12 @@ import {Direction} from './Direction'
 import {Rank} from './Rank'
 import {Suit} from './Suit'
 
-/** A playing card. */
+/**
+ * A playing card.
+ *
+ * There is no scenario where a Card's rank or suit mutates so they are marked
+ * readonly. Direction does change throughout gameplay.
+ */
 export type Card = {
   readonly suit: Suit
   readonly rank: Rank
