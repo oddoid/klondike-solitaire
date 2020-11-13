@@ -35,7 +35,7 @@ export namespace Card {
    *  are represented as card backs. When false, all card identities are
    *  visible regardless of card directions. For example, a face down ace of
    *  spades is `'🂠'` when `directed` is true and `'🂡'` when false.
-   * @ret The Unicode character representation for each card.
+   * @return The Unicode character representation for each card.
    */
   export function toString(
     directed: boolean,

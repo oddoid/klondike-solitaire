@@ -39,8 +39,7 @@ export namespace Tableau {
 
   // [todo] who coordinates the foundation and the pile? to make sure it can be accepted.
   export function play(pile: Readonly<Card>[]): Card | undefined {
-    if (pile[pile.length - 1]?.direction !== 'up') return
-    return pile.pop()
+    if (pile[pile.length - 1]?.direction === 'up') return pile.pop()
   }
 
   /**

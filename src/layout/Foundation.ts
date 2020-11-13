@@ -8,8 +8,8 @@ import {Suit} from '../card/Suit'
  * built in ascending order from ace to king within a suit, squared, and
  * face-up. By convention, the top of a pile is the last index.
  *
- * This data can also be modeled as a `readonly Card[][]` but doing so would
- * allow the suit pile positions to change within the array.
+ * This data can also be modeled as a `readonly Readonly<Card>[][]` but doing so
+ * would allow the suit pile positions to change within the array.
  */
 export type Foundation = Readonly<Record<Suit, Readonly<Card>[]>>
 
