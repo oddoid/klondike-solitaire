@@ -18,10 +18,9 @@ export namespace Suit {
   )
 
   /** Order to Suit map. */
-  export const fromOrder: Readonly<Record<
-    number,
-    Suit
-  >> = ObjectUtil.reverseRecord(toOrder)
+  export const fromOrder: Readonly<
+    Record<number, Suit>
+  > = ObjectUtil.reverseRecord(toOrder)
 
   /** The color of each suit. */
   export const toColor: Readonly<Record<Suit, Color>> = {

@@ -55,8 +55,7 @@ export namespace Rank {
   }
 
   /** Point to Rank map. */
-  export const fromPoint: Readonly<Record<
-    number,
-    Rank
-  >> = ObjectUtil.reverseRecord(toPoint)
+  export const fromPoint: Readonly<
+    Record<number, Rank>
+  > = ObjectUtil.reverseRecord(toPoint)
 }
