@@ -11,7 +11,7 @@ import {Suit} from '../card/Suit'
  * piles or foundations. When all revealed cards are removed, the topmost card
  * be revealed.
  */
-export type Tableau = readonly Card[][]
+export interface Tableau extends ReadonlyArray<Card[]> {}
 
 export namespace Tableau {
   /**

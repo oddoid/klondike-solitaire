@@ -4,7 +4,7 @@ import {Deck} from './Deck'
 import {Foundation} from './Foundation'
 import {Tableau} from './Tableau'
 
-export type Layout = {
+export interface Layout {
   /** Squared deck. end is top. */
   readonly stock: Card[]
   /**

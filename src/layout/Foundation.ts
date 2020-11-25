@@ -11,7 +11,7 @@ import {Suit} from '../card/Suit'
  * This data can also be modeled as a `readonly Readonly<Card>[][]` but doing so
  * would allow the suit pile positions to change within the array.
  */
-export type Foundation = Readonly<Record<Suit, Readonly<Card>[]>>
+export interface Foundation extends Readonly<Record<Suit, Readonly<Card>[]>> {}
 
 export namespace Foundation {
   /** Create a set of foundation piles. */

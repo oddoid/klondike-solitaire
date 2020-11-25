@@ -8,7 +8,7 @@ import {Suit} from './Suit'
  * There is no scenario where a Card's rank or suit mutates so they are marked
  * readonly. Direction does change throughout gameplay.
  */
-export type Card = {
+export interface Card {
   readonly suit: Suit
   readonly rank: Rank
   direction: Direction
