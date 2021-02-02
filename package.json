@@ -1,6 +1,6 @@
 {
   "name": "klondike-solitaire",
-  "author": "oddoid",
+  "author": "oidoid",
   "version": "0.0.0",
   "license": "GPL-3.0-only",
   "description": "Klondike Solitaire game logic library.",
@@ -13,8 +13,8 @@
     "windows"
   ],
   "homepage": "https://git.io/klondike",
-  "repository": "github:oddoid/klondike-solitaire",
-  "bugs": "https://github.com/oddoid/klondike-solitaire/issues",
+  "repository": "github:oidoid/klondike-solitaire",
+  "bugs": "https://github.com/oidoid/klondike-solitaire/issues",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
