@@ -1,6 +1,10 @@
 {
   "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
   "transform": {".+\\.ts$": "ts-jest"},
+  "moduleNameMapper": {
+    "//": "Strip .js suffixes on imports.",
+    "^(\\.?\\./.+)\\.js$": "$1"
+  },
   "collectCoverage": true,
   "coverageDirectory": "dist/coverage",
   "errorOnDeprecated": true,

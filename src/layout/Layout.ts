@@ -1,8 +1,8 @@
-import {ArrayUtil} from '../utils/ArrayUtil'
-import {Card} from '../card/Card'
-import {Deck} from './Deck'
-import {Foundation} from './Foundation'
-import {Tableau} from './Tableau'
+import {ArrayUtil} from '../utils/ArrayUtil.js'
+import {Card} from '../card/Card.js'
+import {Deck} from './Deck.js'
+import {Foundation} from './Foundation.js'
+import {Tableau} from './Tableau.js'
 
 export interface Layout {
   /** Squared deck. end is top. */

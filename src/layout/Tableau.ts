@@ -1,6 +1,6 @@
-import {Card} from '../card/Card'
-import {Rank} from '../card/Rank'
-import {Suit} from '../card/Suit'
+import {Card} from '../card/Card.js'
+import {Rank} from '../card/Rank.js'
+import {Suit} from '../card/Suit.js'
 
 /**
  * The playing field consists of a tableau of piles that can be maneuvered to

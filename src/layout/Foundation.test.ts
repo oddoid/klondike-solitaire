@@ -1,5 +1,5 @@
-import {Card} from '../card/Card'
-import {Foundation} from './Foundation'
+import {Card} from '../card/Card.js'
+import {Foundation} from './Foundation.js'
 
 test.each([
   ['empty', '', '🃑', '🃑'],

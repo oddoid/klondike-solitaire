@@ -1,4 +1,4 @@
-import {ArrayUtil} from './ArrayUtil'
+import {ArrayUtil} from './ArrayUtil.js'
 
 test('shuffle', () => {
   const iterations = 1_000_000

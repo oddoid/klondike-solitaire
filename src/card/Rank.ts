@@ -1,4 +1,4 @@
-import {ObjectUtil} from '../utils/ObjectUtil'
+import {ObjectUtil} from '../utils/ObjectUtil.js'
 
 /**
  * Pip or face denomination. Number cards are usually represented with a

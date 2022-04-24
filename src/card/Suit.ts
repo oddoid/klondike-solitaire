@@ -1,5 +1,5 @@
-import {Color} from './Color'
-import {ObjectUtil} from '../utils/ObjectUtil'
+import {Color} from './Color.js'
+import {ObjectUtil} from '../utils/ObjectUtil.js'
 
 /** Pip category. */
 export type Suit = typeof Suit.values[number]

@@ -1,5 +1,5 @@
-import {Card} from './Card'
-import {Deck} from '../layout/Deck'
+import {Card} from './Card.js'
+import {Deck} from '../layout/Deck.js'
 
 test.each(<const>[
   [

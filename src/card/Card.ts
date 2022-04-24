@@ -1,6 +1,6 @@
-import {Direction} from './Direction'
-import {Rank} from './Rank'
-import {Suit} from './Suit'
+import {Direction} from './Direction.js'
+import {Rank} from './Rank.js'
+import {Suit} from './Suit.js'
 
 /**
  * A playing card.

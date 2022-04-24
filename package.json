@@ -15,6 +15,7 @@
   "homepage": "https://git.io/klondike",
   "repository": "github:oidoid/klondike-solitaire",
   "bugs": "https://github.com/oidoid/klondike-solitaire/issues",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

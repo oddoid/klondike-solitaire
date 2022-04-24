@@ -1,6 +1,6 @@
-import {Card} from '../card/Card'
-import {Deck} from './Deck'
-import {Tableau} from './Tableau'
+import {Card} from '../card/Card.js'
+import {Deck} from './Deck.js'
+import {Tableau} from './Tableau.js'
 
 test('make', () => {
   const stock = Deck.make()

@@ -1,6 +1,6 @@
-import {Card} from '../card/Card'
-import {Rank} from '../card/Rank'
-import {Suit} from '../card/Suit'
+import {Card} from '../card/Card.js'
+import {Rank} from '../card/Rank.js'
+import {Suit} from '../card/Suit.js'
 
 /**
  * One pile per suit. The number of piles are fixed and distinct. Each pile is
