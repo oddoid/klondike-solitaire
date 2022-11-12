@@ -6,7 +6,7 @@ import {
   Succeeds,
   Suit,
   Visibility,
-} from '@/klondike-solitaire';
+} from '@/solitaire';
 import { Selection } from './Selection.ts';
 
 /**

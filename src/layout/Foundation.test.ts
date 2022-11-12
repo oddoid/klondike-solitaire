@@ -1,5 +1,5 @@
 import { assertEquals } from 'std/testing/asserts.ts';
-import { Card, Foundation } from '@/klondike-solitaire';
+import { Card, Foundation } from '@/solitaire';
 
 for (
   const [name, foundationStr, cardStr, expected] of [

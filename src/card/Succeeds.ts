@@ -1,4 +1,4 @@
-import { Card } from '@/klondike-solitaire';
+import { Card } from '@/solitaire';
 import { Opt } from '@/oidlib';
 
 /**

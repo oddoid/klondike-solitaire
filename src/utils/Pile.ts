@@ -5,7 +5,7 @@ import {
   Suit,
   Unicode,
   Visibility,
-} from '@/klondike-solitaire';
+} from '@/solitaire';
 
 export namespace Pile {
   /** Generate a complete pack of 52 ordered cards. */

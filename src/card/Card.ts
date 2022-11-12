@@ -6,7 +6,7 @@ import {
   Suit,
   SuitASCII,
   Visibility,
-} from '@/klondike-solitaire';
+} from '@/solitaire';
 import { assertNonNull, Immutable, NonNull } from '@/oidlib';
 
 /**

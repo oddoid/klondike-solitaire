@@ -1,4 +1,4 @@
-import { Card, Foundation, Solitaire } from '@/klondike-solitaire';
+import { Card, Foundation, Solitaire } from '@/solitaire';
 import { Uint } from '@/oidlib';
 import { assertEquals } from 'std/testing/asserts.ts';
 import { assertSnapshot } from '../../oidlib/src/test/TestUtil.ts';

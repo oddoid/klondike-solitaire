@@ -4,7 +4,7 @@ import {
   Pile,
   Tableau,
   Visibility,
-} from '@/klondike-solitaire';
+} from '@/solitaire';
 import { ArrayUtil, I32, NonNull, Random, Str, Uint, UintXY } from '@/oidlib';
 import { Selection } from './layout/Selection.ts';
 

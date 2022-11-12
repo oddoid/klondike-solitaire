@@ -1,5 +1,5 @@
 import { UintXY } from '@/oidlib';
-import { Card } from '@/klondike-solitaire';
+import { Card } from '@/solitaire';
 
 export interface Selection {
   readonly cards: Card[];

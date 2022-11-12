@@ -5,7 +5,7 @@ import {
   Succeeds,
   Suit,
   Visibility,
-} from '@/klondike-solitaire';
+} from '@/solitaire';
 import { Immutable, UintXY } from '@/oidlib';
 import { Selection } from './Selection.ts';
 

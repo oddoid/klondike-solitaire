@@ -1,5 +1,5 @@
 import { assertEquals } from 'std/testing/asserts.ts';
-import { Card, Pile, Tableau } from '@/klondike-solitaire';
+import { Card, Pile, Tableau } from '@/solitaire';
 import { Uint } from '@/oidlib';
 
 Deno.test('Tableau.', () => {

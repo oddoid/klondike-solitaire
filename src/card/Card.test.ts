@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
-import { Card, Pile, Rank } from '@/klondike-solitaire';
+import { Card, Pile, Rank } from '@/solitaire';
 import { Opt } from '@/oidlib';
 
 for (
