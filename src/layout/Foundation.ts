@@ -1,87 +1,108 @@
-import {Card} from '../card/Card.js'
-import {Rank} from '../card/Rank.js'
-import {Suit} from '../card/Suit.js'
+import {
+  Card,
+  Pile,
+  Rank,
+  Succeeds,
+  Suit,
+  Visibility,
+} from '@/klondike-solitaire';
+import { Immutable, UintXY } from '@/oidlib';
+import { Selection } from './Selection.ts';
 
 /**
- * One pile per suit. The number of piles are fixed and distinct. Each pile is
- * initially empty and building them is the objective. Consecutive ranks are
- * built in ascending order from ace to king within a suit, squared, and
- * face-up. By convention, the top of a pile is the last index.
- *
- * This data can also be modeled as a `readonly Readonly<Card>[][]` but doing so
- * would allow the suit pile positions to change within the array.
+ * One foundation pillar per suit. The number of pillars are fixed and distinct.
+ * Each pillar is initially empty and building them is the objective.
+ * Consecutive ranks are built in ascending order from ace to king within a
+ * suit, squared, and face-up. The top of a pillar is the last index.
  */
-export interface Foundation extends Readonly<Record<Suit, Readonly<Card>[]>> {}
+// export type Foundation = Readonly<Record<Suit, Card[]>>;
+export type Foundation = readonly [
+  Clubs: Card[],
+  Diamonds: Card[],
+  Hearts: Card[],
+  Spades: Card[],
+];
+
+/** Create a set of ordered foundation piles. */
+export function Foundation(): Foundation {
+  return [[], [], [], []];
+}
+
+/**
+ * Tests whether right directly succeeds left. True when cards are face up
+ * and:
+ * - Only one card (left).
+ * - No preceding card (left) and right is an ace.
+ * - Suits match and the rank is the next greater adjacent.
+ */
+const succeeds: Succeeds = (lhs, rhs) => {
+  if (lhs?.direction == 'Down' || rhs?.direction == 'Down') return false;
+  if (rhs == null) return lhs != null;
+  if (lhs == null) return rhs.rank == 'Ace';
+  if (lhs.suit != rhs.suit) return false;
+  return (Rank.toOrder[lhs.rank] + 1) == Rank.toOrder[rhs.rank];
+};
+
+const suitToIndex = Immutable(
+  { Clubs: 0, Diamonds: 1, Hearts: 2, Spades: 3 } as const,
+); // to-do: satisfies Record<Suit, number>
 
 export namespace Foundation {
-  /** Create a set of foundation piles. */
-  export function make(): Foundation {
-    return Suit.values.reduce(
-      (foundation, suit) => ({...foundation, [suit]: []}),
-      <Foundation>{}
-    )
-  }
-
   /**
-   * Add a card to a foundation pile. Invoke `isBuildable()` first to verify
+   * Add a card to a foundation pillar. Invoke `isBuildable()` first to verify
    * the card is buildable.
-   *
-   * An error is thrown if the card cannot be built to force the client to
-   * handle when a card cannot be built. If the unbuildable scenario were
-   * unhandled, the card might be dropped.
    */
-  // [todo] expose pile, not Foundation, for testing collision success?
-  export function tryBuild(foundation: Foundation, card: Readonly<Card>): void {
-    if (!isBuildable(foundation, card))
-      throw new Error(
-        `${Card.toString(true, card)} cannot be built on foundation.`
-      )
-    foundation[card.suit].push(card)
+  export function build(self: Foundation, cards: Card[]): void {
+    const card = cards[0];
+    if (card == null || !isBuildable(self, cards)) return;
+    getPillar(self, card.suit).push(...cards.splice(0));
   }
 
-  /** Test whether a pile's top card can be built on foundation pile. */
+  export function getPillar(self: Foundation, suit: Suit): Card[] {
+    return self[suitToIndex[suit]];
+  }
+
+  /** Test whether a pile's top card can be built on foundation pillar. */
   export function isBuildable(
-    foundation: Foundation,
-    card: Readonly<Card>
+    self: Foundation,
+    cards: readonly Readonly<Card>[],
   ): boolean {
-    if (card.direction === 'down') return false
+    const card = cards[0];
+    if (card == null || !Card.succeeds(succeeds, ...cards)) return false;
+    return succeeds(getPillar(self, card.suit).at(-1), card);
+  }
 
-    // Only aces are permitted as the base card.
-    if (!foundation[card.suit].length && card.rank === 'ace') return true
-
-    const pile = foundation[card.suit]
-    const top = pile[pile.length - 1]
-    return !!top && succeeds(card, top)
+  export function select(
+    self: Readonly<Foundation>,
+    card: Readonly<Card>,
+  ): Selection | undefined {
+    for (const [index, foundation] of self.entries()) {
+      const y = foundation.indexOf(card);
+      if (y == -1) continue;
+      return {
+        cards: foundation.splice(y),
+        pile: 'Foundation',
+        xy: UintXY(index, y),
+      };
+    }
   }
 
   /** Test whether the foundation is complete. */
-  export function isBuilt(foundation: Foundation): boolean {
-    return isPileBuilt(...Object.values(foundation))
+  export function isBuilt(self: Readonly<Foundation>): boolean {
+    return isPillarBuilt(...Object.values(self));
   }
 
-  /** Test whether one or more piles are complete. */
-  export function isPileBuilt(
-    ...piles: readonly (readonly Readonly<Card>[])[]
+  /** Test whether one or more pillars are complete. */
+  export function isPillarBuilt(
+    ...pillars: readonly (readonly Readonly<Card>[])[]
   ): boolean {
-    return piles.every(pile => pile[pile.length - 1]?.rank === 'king')
+    return pillars.every((pillar) => pillar.at(-1)?.rank == 'King');
   }
 
-  /**
-   * Remove the top card for insertion back into a tableau. If the card is not
-   * worried, it should be rebuilt.
-   */
-  export function worry(pile: Readonly<Card>[]): Card | undefined {
-    return pile.pop()
-  }
-
-  /**
-   * Tests whether left directly succeeds right. True when suits match and the
-   * rank is the next greater adjacent.
-   */
-  function succeeds(left: Readonly<Card>, right: Readonly<Card>): boolean {
-    return (
-      left.suit === right.suit &&
-      Rank.toOrder[left.rank] === Rank.toOrder[right.rank] + 1
-    )
+  export function toString(
+    self: Readonly<Foundation>,
+    visibility: Visibility = 'Directed',
+  ): string {
+    return Pile.toString(Object.values(self), visibility);
   }
 }

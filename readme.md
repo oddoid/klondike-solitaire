@@ -1,56 +1,27 @@
-# 🂮 [Klondike Solitaire](https://git.io/klondike)
+# 🂮 Klondike Solitaire
 
-**[Klondike Solitaire](<https://en.wikipedia.org/wiki/Klondike_(solitaire)>)**
-game logic library.
+Models and functions for playing Klondike Solitaire.
 
-<!-- [todo] add git.io link to title. -->
+## Installation
 
-## Table of Contents
-
-<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
-
-<!-- code_chunk_output -->
-
-- [Table of Contents](#table-of-contents)
-- [Installation and version history](#installation-and-version-history)
-- [API and Usage](#api-and-usage)
-- [Rules](#rules)
-- [License](#license)
-  - [GPL-3.0-only](#gpl-30-only)
-
-<!-- /code_chunk_output -->
-
-## Installation and version history
-
-Install the library:
-
-```bash
-npm i --save-prefix= klondike-solitaire
-```
-
-See the [changelog](changelog.md) for release notes.
-
-## API and Usage
-
-<!-- [todo] add API docs or generate JSDocs. Add example. -->
-
-## Rules
-
-<!-- [todo] add game instructions manual and plot. -->
+klondike-solitaire is a Deno TypeScript project. Add
+`https://deno.land/x/klondike-solitaire/mod.ts` to your import modules and
+reference the `https://deno.land/x/klondike-solitaire/mods.json` import map.
 
 ## License
 
-© Stephen Niedzielski.
+© oidoid.
 
-### GPL-3.0-only
+### AGPL-3.0-only
 
 This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, version 3.
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with
-this program. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Affero General Public License along
+with this program. If not, see <https://www.gnu.org/licenses/>.

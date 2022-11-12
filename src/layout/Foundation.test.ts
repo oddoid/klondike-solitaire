@@ -1,97 +1,90 @@
-import {Card} from '../card/Card.js'
-import {Foundation} from './Foundation.js'
+import { assertEquals } from 'std/testing/asserts.ts';
+import { Card, Foundation } from '@/klondike-solitaire';
 
-test.each([
-  ['empty', '', '🃑', '🃑'],
-  ['nonempty', '🃑', '🃒', '🃑🃒'],
-  ['almost built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', '🃞', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞']
-])('build buildable %s', (_, foundationStr, cardStr, expected) => {
-  const foundation = Foundation.make()
-  foundation.clubs.push(
-    ...[...foundationStr].map(card => Card.fromString(card))
-  )
-  const card = Card.fromString(cardStr)
-  expect(Foundation.isBuildable(foundation, card)).toStrictEqual(true)
-  Foundation.tryBuild(foundation, card)
-  expect(foundation).toStrictEqual({
-    clubs: [...expected].map(card => Card.fromString(card)),
-    diamonds: [],
-    hearts: [],
-    spades: []
-  })
-})
+for (
+  const [name, foundationStr, cardStr, expected] of [
+    ['empty and ace', '', '🃑', '🃑'],
+    ['nonempty', '🃑', '🃒', '🃑🃒'],
+    ['almost built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', '🃞', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞'],
+  ] as const
+) {
+  Deno.test(`Build buildable: ${name}.`, () => {
+    const foundation = Foundation();
+    foundation[0].push(...Card.fromString(foundationStr));
+    const cards = Card.fromString(cardStr);
+    console.error(foundation, cards);
+    assertEquals(Foundation.isBuildable(foundation, cards), true);
+    Foundation.build(foundation, cards);
+    assertEquals(cards.length, 0);
+    assertEquals(foundation, [Card.fromString(expected), [], [], []]);
+  });
+}
 
-test.each([
-  ['empty and non-ace', '', '🃒'],
-  ['nonempty and non-matching suit', '🃑', '🂢'],
-  ['nonempty and non-sequential rank', '🃑', '🃓'],
-  ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑']
-])('build non-buildable %s', (_, foundationStr, cardStr) => {
-  const foundation = Foundation.make()
-  foundation.clubs.push(
-    ...[...foundationStr].map(card => Card.fromString(card))
-  )
-  const card = Card.fromString(cardStr)
-  expect(Foundation.isBuildable(foundation, card)).toStrictEqual(false)
-  expect(() => Foundation.tryBuild(foundation, card)).toThrow()
-})
+for (
+  const [name, foundationStr, cardStr] of [
+    ['empty and non-ace', '', '🃒'],
+    ['nonempty and non-matching suit', '🃑', '🂢'],
+    ['nonempty and non-sequential rank', '🃑', '🃓'],
+    ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑'],
+  ] as const
+) {
+  Deno.test(`Forbid building: ${name}.`, () => {
+    const foundation = Foundation();
+    foundation[0].push(...Card.fromString(foundationStr));
+    const cards = Card.fromString(cardStr);
+    assertEquals(Foundation.isBuildable(foundation, cards), false);
+    Foundation.build(foundation, cards);
+    assertEquals(cards.length, 1);
+  });
+}
 
-test('build card down', () => {
-  const foundation = Foundation.make()
-  foundation.clubs.push(...[...'🃑🃒🃓'].map(card => Card.fromString(card)))
-  const card = Card.fromString('🃔', 'down')
-  expect(Foundation.isBuildable(foundation, card)).toStrictEqual(false)
-  expect(() => Foundation.tryBuild(foundation, card)).toThrow()
-})
+Deno.test('Build card down.', () => {
+  const foundation = Foundation();
+  foundation[0].push(...Card.fromString('🃑🃒🃓'));
+  const cards = Card.fromString('🃔', 'Down');
+  assertEquals(Foundation.isBuildable(foundation, cards), false);
+  Foundation.build(foundation, cards);
+  assertEquals(cards.length, 1);
+});
 
-test.each([
-  ['empty', Foundation.make(), false],
-  [
-    'partly',
-    {
-      clubs: [Card.fromString('🃑')],
-      diamonds: [Card.fromString('🃁')],
-      hearts: [Card.fromString('🂱')],
-      spades: [Card.fromString('🂡')]
-    },
-    false
-  ],
-  [
-    'built',
-    {
-      clubs: [...'🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞'].map(card => Card.fromString(card)),
-      diamonds: [...'🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋🃍🃎'].map(card => Card.fromString(card)),
-      hearts: [...'🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂽🂾'].map(card => Card.fromString(card)),
-      spades: [...'🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮'].map(card => Card.fromString(card))
-    },
-    true
-  ]
-])('isBuilt %s', (_, foundation, built) =>
-  expect(Foundation.isBuilt(foundation)).toStrictEqual(built)
-)
+for (
+  const [name, foundation, built] of [
+    ['empty', Foundation(), false],
+    ['partly', {
+      Clubs: Card.fromString('🃑'),
+      Diamonds: Card.fromString('🃁'),
+      Hearts: Card.fromString('🂱'),
+      Spades: Card.fromString('🂡'),
+    }, false],
+    [
+      'built',
+      {
+        Clubs: Card.fromString('🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞'),
+        Diamonds: Card.fromString('🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋🃍🃎'),
+        Hearts: Card.fromString('🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂽🂾'),
+        Spades: Card.fromString('🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮'),
+      },
+      true,
+    ],
+  ] as const
+) {
+  Deno.test(
+    `Is built: ${name}.`,
+    () => assertEquals(Foundation.isBuilt(<Foundation> foundation), built),
+  );
+}
 
-test.each([
-  ['empty', '', false],
-  ['singular', '🃑', false],
-  ['not built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', false],
-  ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true]
-])('isPileBuilt %s', (_, foundation, built) =>
-  expect(
-    Foundation.isPileBuilt([...foundation].map(card => Card.fromString(card)))
-  ).toStrictEqual(built)
-)
-
-test.each([
-  ['empty', '', '', ''],
-  ['singular', '🃑', '', '🃑'],
-  ['multiple', '🃑🃒', '🃑', '🃒']
-])('worry %s', (_, foundationStr, expectedFoundation, expectedCard) => {
-  const foundation = [...foundationStr].map(card => Card.fromString(card))
-  const top = Foundation.worry(foundation)
-  expect(foundation).toStrictEqual(
-    [...expectedFoundation].map(card => Card.fromString(card))
-  )
-  expect(top).toStrictEqual(
-    expectedCard ? Card.fromString(expectedCard) : undefined
-  )
-})
+for (
+  const [name, foundationStr, built] of [
+    ['empty', '', false],
+    ['singular', '🃑', false],
+    ['not built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', false],
+    ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true],
+  ] as const
+) {
+  Deno.test(`Is pillar built: ${name}.`, () =>
+    assertEquals(
+      Foundation.isPillarBuilt(Card.fromString(foundationStr)),
+      built,
+    ));
+}
