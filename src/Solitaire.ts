@@ -1,12 +1,12 @@
+import { ArrayUtil, I32, NonNull, Random, Str, Uint, UintXY } from '@/oidlib';
 import {
   Card,
   Foundation,
   Pile,
+  Selection,
   Tableau,
   Visibility,
 } from '@/solitaire';
-import { ArrayUtil, I32, NonNull, Random, Str, Uint, UintXY } from '@/oidlib';
-import { Selection } from './layout/Selection.ts';
 
 export interface Solitaire {
   /**
@@ -63,7 +63,7 @@ export function Solitaire(
 }
 
 export namespace Solitaire {
-  // doesn't clear wins
+  /** Set game to initial state except wins. */
   export function reset(self: Solitaire): void {
     if (isWon(self)) self.wins = Uint(self.wins + 1);
     for (const pillar of self.foundation) self.stock.push(...pillar.splice(0));
@@ -116,18 +116,32 @@ export namespace Solitaire {
       deselect(self);
       // self.selected is now cleared.
     }
+    // Facedown cards cannot be moved.
+    // if (cards[0]?.direction == 'Down') deselect(self);
     return self.selected;
   }
 
-  /**
-   * Return the waste to the stock. Resets the reserve size.
-   */
+  /** Return the waste to the stock. Resets the reserve size. */
   export function deal(self: Solitaire): void {
     deselect(self);
     if (self.stock.length > 0) return;
     const waste = self.waste.splice(0).reverse();
     for (const card of waste) card.direction = 'Down';
     self.stock.push(...waste);
+  }
+
+  export function isBuildable(
+    self: Readonly<Solitaire>,
+    at: { type: 'Foundation' } | { type: 'Tableau'; x: Uint },
+  ): boolean {
+    if (self.selected == null) return false;
+    if (at.type == 'Foundation') {
+      return Foundation.isBuildable(self.foundation, self.selected.cards);
+    }
+    return Tableau.isBuildable(
+      NonNull(self.tableau[at.x]),
+      self.selected.cards,
+    );
   }
 
   export function isWon(self: Readonly<Solitaire>): boolean {
@@ -166,7 +180,7 @@ ${selected}
     `.trim();
   }
 
-  export function put(
+  export function build(
     self: Solitaire,
     at: { type: 'Foundation' } | { type: 'Tableau'; x: Uint },
   ): void {

@@ -1,5 +1,5 @@
-import { Card, Foundation, Solitaire } from '@/solitaire';
 import { Uint } from '@/oidlib';
+import { Card, Foundation, Solitaire } from '@/solitaire';
 import { assertEquals } from 'std/testing/asserts.ts';
 import { assertSnapshot } from '../../oidlib/src/test/TestUtil.ts';
 // import { assertSnapshot } from '@/oidlib';
@@ -131,7 +131,7 @@ Deno.test('Playthrough', async (test) => {
   await test.step(
     'Put onto the jack of hearts at tableau 5.',
     async (test) => {
-      Solitaire.put(solitaire, { type: 'Tableau', x: Uint(5) });
+      Solitaire.build(solitaire, { type: 'Tableau', x: Uint(5) });
       await assertSnapshot(test, Solitaire.toString(solitaire));
     },
   );
@@ -147,7 +147,7 @@ Deno.test('Playthrough', async (test) => {
   await test.step(
     'Put onto the queen of spades at tableau 1.',
     async (test) => {
-      Solitaire.put(solitaire, { type: 'Tableau', x: Uint(1) });
+      Solitaire.build(solitaire, { type: 'Tableau', x: Uint(1) });
       await assertSnapshot(test, Solitaire.toString(solitaire));
     },
   );
@@ -179,7 +179,7 @@ Deno.test('Playthrough', async (test) => {
   await test.step(
     'Put onto the ten of hearts at tableau 1.',
     async (test) => {
-      Solitaire.put(solitaire, { type: 'Tableau', x: Uint(5) });
+      Solitaire.build(solitaire, { type: 'Tableau', x: Uint(5) });
       await assertSnapshot(test, Solitaire.toString(solitaire));
     },
   );

@@ -1,5 +1,5 @@
-import { assertEquals } from 'std/testing/asserts.ts';
 import { Card, Foundation } from '@/solitaire';
+import { assertEquals } from 'std/testing/asserts.ts';
 
 for (
   const [name, foundationStr, cardStr, expected] of [
@@ -12,7 +12,6 @@ for (
     const foundation = Foundation();
     foundation[0].push(...Card.fromString(foundationStr));
     const cards = Card.fromString(cardStr);
-    console.error(foundation, cards);
     assertEquals(Foundation.isBuildable(foundation, cards), true);
     Foundation.build(foundation, cards);
     assertEquals(cards.length, 0);

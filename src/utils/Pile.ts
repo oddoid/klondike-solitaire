@@ -1,11 +1,4 @@
-import {
-  Card,
-  Direction,
-  Rank,
-  Suit,
-  Unicode,
-  Visibility,
-} from '@/solitaire';
+import { Card, Direction, Rank, Suit, Unicode, Visibility } from '@/solitaire';
 
 export namespace Pile {
   /** Generate a complete pack of 52 ordered cards. */

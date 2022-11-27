@@ -3,11 +3,11 @@ import {
   Card,
   Pile,
   Rank,
+  Selection,
   Succeeds,
   Suit,
   Visibility,
 } from '@/solitaire';
-import { Selection } from './Selection.ts';
 
 /**
  * The playing field consists of a tableau of lanes that can be maneuvered to

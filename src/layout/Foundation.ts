@@ -1,13 +1,13 @@
+import { Immutable, UintXY } from '@/oidlib';
 import {
   Card,
   Pile,
   Rank,
+  Selection,
   Succeeds,
   Suit,
   Visibility,
 } from '@/solitaire';
-import { Immutable, UintXY } from '@/oidlib';
-import { Selection } from './Selection.ts';
 
 /**
  * One foundation pillar per suit. The number of pillars are fixed and distinct.
