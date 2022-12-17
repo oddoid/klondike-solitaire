@@ -1,6 +1,5 @@
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 import { Card, Pile, Rank } from '@/solitaire';
-import { Opt } from '@/oidlib';
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 
 for (
   const [name, cards, down, up] of [
@@ -91,7 +90,7 @@ Deno.test('From string: up.', () =>
   }));
 
 Deno.test('Succeeds: empty.', () => {
-  let args: Opt<Card>[];
+  let args: (Card | undefined)[];
   Card.succeeds((lhs, rhs) => {
     args = [lhs, rhs];
     return false;
@@ -101,7 +100,7 @@ Deno.test('Succeeds: empty.', () => {
 
 Deno.test('Succeeds: singular.', () => {
   const cards = Card.fromString('🃑');
-  let args: Opt<Card>[];
+  let args: (Card | undefined)[];
   Card.succeeds((lhs, rhs) => {
     args = [lhs, rhs];
     return false;
@@ -111,7 +110,7 @@ Deno.test('Succeeds: singular.', () => {
 
 Deno.test('Succeeds: two.', () => {
   const cards = Card.fromString('🃑🃒');
-  let args: Opt<Card>[];
+  let args: (Card | undefined)[];
   Card.succeeds((lhs, rhs) => {
     args = [lhs, rhs];
     return false;
@@ -121,7 +120,7 @@ Deno.test('Succeeds: two.', () => {
 
 Deno.test('Succeeds: three.', () => {
   const cards = Card.fromString('🃑🃒🃓');
-  const args: Opt<Card>[][] = [];
+  const args: (Card | undefined)[][] = [];
   Card.succeeds((lhs, rhs) => {
     args.push([lhs, rhs]);
     return true;

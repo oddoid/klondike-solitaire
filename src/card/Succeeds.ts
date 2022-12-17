@@ -1,5 +1,4 @@
 import { Card } from '@/solitaire';
-import { Opt } from '@/oidlib';
 
 /**
  * Returns true if right card directly succeeds left.
@@ -9,6 +8,6 @@ import { Opt } from '@/oidlib';
  * otherwise once for every pair (len - 1).
  */
 export type Succeeds = (
-  lhs: Opt<Readonly<Card>>,
-  rhs: Opt<Readonly<Card>>,
+  lhs: Readonly<Card> | undefined,
+  rhs: Readonly<Card> | undefined,
 ) => boolean;

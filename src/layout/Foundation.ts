@@ -45,7 +45,7 @@ const succeeds: Succeeds = (lhs, rhs) => {
 
 const suitToIndex = Immutable(
   { Clubs: 0, Diamonds: 1, Hearts: 2, Spades: 3 } as const,
-); // to-do: satisfies Record<Suit, number>
+) satisfies Record<Suit, number>;
 
 export namespace Foundation {
   /**
