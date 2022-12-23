@@ -59,7 +59,7 @@ export namespace Rank {
       Queen: 13,
       King: 14,
     } as const,
-  );
+  ) satisfies Record<Rank, number>;
 
   /** Point to Rank map. */
   export const fromPoint: Readonly<Record<number, Rank>> = Immutable(
@@ -82,5 +82,5 @@ export namespace Rank {
       Queen: 'Q',
       King: 'K',
     } as const,
-  );
+  ) satisfies Record<Rank, string>;
 }
