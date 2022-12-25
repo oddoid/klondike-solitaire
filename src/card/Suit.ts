@@ -1,4 +1,5 @@
 import { Immutable, Inverse } from '@/oidlib';
+import { Color } from './Color.ts';
 
 /** Pip category. */
 export type Suit = Parameters<typeof Suit.values['has']>[0];
@@ -6,7 +7,6 @@ export type Suit = Parameters<typeof Suit.values['has']>[0];
 export type SuitASCII = 'C' | 'D' | 'H' | 'S';
 
 export namespace Suit {
-  // to-do: make this pascalcase?
   export const values = Immutable(
     new Set(['Clubs', 'Diamonds', 'Hearts', 'Spades'] as const),
   );
@@ -34,9 +34,9 @@ export namespace Suit {
       Hearts: 'Red',
       Spades: 'Black',
     } as const,
-  );
+  ) satisfies Record<Suit, Color>;
 
   export const toASCII = Immutable(
     { Clubs: 'C', Diamonds: 'D', Hearts: 'H', Spades: 'S' } as const,
-  );
+  ) satisfies Record<Suit, string>;
 }
