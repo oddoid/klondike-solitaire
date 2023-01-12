@@ -1,5 +1,5 @@
 import { Immutable, Inverse } from '@/oidlib';
-import { Color } from './Color.ts';
+import { Color } from '@/solitaire';
 
 /** Pip category. */
 export type Suit = Parameters<typeof Suit.values['has']>[0];

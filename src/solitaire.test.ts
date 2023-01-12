@@ -1,7 +1,7 @@
 import { Uint } from '@/oidlib';
 import { Card, Foundation, Solitaire } from '@/solitaire';
 import { assertEquals } from 'std/testing/asserts.ts';
-import { assertSnapshot } from '../../oidlib/src/test/TestUtil.ts';
+import { assertSnapshot } from '../../oidlib/src/test/test-util.ts';
 // import { assertSnapshot } from '@/oidlib';
 
 Deno.test('Deal', async (test) => {
