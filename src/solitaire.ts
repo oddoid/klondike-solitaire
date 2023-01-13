@@ -38,6 +38,7 @@ export interface Solitaire {
 export function Solitaire(
   drawSize?: Uint,
   random?: () => number,
+  wins?: Uint,
   tableauSize?: Uint,
 ): Solitaire {
   drawSize ??= Uint(3);
@@ -56,7 +57,7 @@ export function Solitaire(
     waste: [],
     random,
     tableauSize,
-    wins: Uint(0),
+    wins: wins ?? Uint(0),
   };
   Tableau.deal(self.tableau, stock);
   return self;
