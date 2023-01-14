@@ -104,7 +104,12 @@ Deno.test('Playthrough', async (test) => {
   await test.step(
     'Set the game.',
     async (test) => {
-      solitaire = Solitaire(Uint(3), () => 1 - Number.EPSILON, Uint(7));
+      solitaire = Solitaire(
+        Uint(3),
+        () => 1 - Number.EPSILON,
+        Uint(0),
+        Uint(7),
+      );
       Solitaire.deal(solitaire);
       await assertSnapshot(test, Solitaire.toString(solitaire));
     },
