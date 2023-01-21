@@ -83,7 +83,7 @@ export namespace Tableau {
     for (const [x, lane] of self.entries()) {
       const y = lane.indexOf(card);
       if (y == -1) continue;
-      return { cards: lane.splice(y), pile: 'Tableau', xy: UintXY(x, y) };
+      return { cards: lane.splice(y), pile: 'Tableau', xy: new UintXY(x, y) };
     }
   }
 

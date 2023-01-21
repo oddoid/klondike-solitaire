@@ -82,7 +82,7 @@ export namespace Foundation {
       return {
         cards: foundation.splice(y),
         pile: 'Foundation',
-        xy: UintXY(index, y),
+        xy: new UintXY(index, y),
       };
     }
   }

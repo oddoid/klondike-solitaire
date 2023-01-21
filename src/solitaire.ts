@@ -43,8 +43,8 @@ export function Solitaire(
 ): Solitaire {
   drawSize ??= Uint(3);
   if (random == null) {
-    const rand = Random(I32.mod(Date.now()));
-    random = () => Random.fraction(rand);
+    const rnd = new Random(I32.mod(Date.now()));
+    random = () => rnd.fraction;
   }
   tableauSize ??= Uint(7);
   const stock = Pile.newDeck();
@@ -99,7 +99,7 @@ export namespace Solitaire {
       self.selected = {
         cards: self.waste.splice(wasteY),
         pile: 'Waste',
-        xy: UintXY(0, wasteY),
+        xy: new UintXY(0, wasteY),
       };
       return self.selected;
     }
@@ -172,7 +172,7 @@ export namespace Solitaire {
     const selected = self.selected == null
       ? ''
       : (Card.toString(visibility, ...self.selected.cards) +
-        ` from ${self.selected.pile} ${UintXY.toString(self.selected.xy)}`);
+        ` from ${self.selected.pile} ${self.selected.xy.toString()}`);
     return `
 ${foundations}
 ${tableau}
