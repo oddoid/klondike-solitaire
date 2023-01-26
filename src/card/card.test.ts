@@ -1,5 +1,5 @@
-import { Card, Pile, Rank } from '@/solitaire';
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
+import { Card, Pile, Rank } from '@/solitaire'
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 for (
   const [name, cards, down, up] of [
@@ -16,10 +16,10 @@ for (
   Deno.test(
     `isDirected: ${name}.`,
     () => {
-      assertEquals(Card.isDirected('Down', ...cards), down);
-      assertEquals(Card.isDirected('Up', ...cards), up);
+      assertEquals(Card.isDirected('Down', ...cards), down)
+      assertEquals(Card.isDirected('Up', ...cards), up)
     },
-  );
+  )
 }
 
 for (
@@ -45,15 +45,15 @@ for (
       assertEquals(
         Card.succeeds(
           (lhs, rhs) => {
-            if (lhs == null) return false;
-            if (rhs == null) return true;
-            return Rank.toOrder[lhs.rank] + 1 == Rank.toOrder[rhs.rank];
+            if (lhs == null) return false
+            if (rhs == null) return true
+            return Rank.toOrder[lhs.rank] + 1 == Rank.toOrder[rhs.rank]
           },
           ...Card.fromString(pileStr),
         ),
         expected,
       ),
-  );
+  )
 }
 
 for (const card of Pile.newDeck('Up')) {
@@ -64,72 +64,72 @@ for (const card of Pile.newDeck('Up')) {
         Card.fromStringCode(Card.toString('Directed', card)),
         card,
       ),
-  );
+  )
 }
 
 Deno.test('From string: unknown.', () => {
-  assertThrows(() => Card.fromStringCode('A'));
-});
+  assertThrows(() => Card.fromStringCode('A'))
+})
 
 Deno.test('From string: empty.', () => {
-  assertThrows(() => Card.fromStringCode(''));
-});
+  assertThrows(() => Card.fromStringCode(''))
+})
 
 Deno.test('From string: down.', () =>
   assertEquals(Card.fromStringCode('🃑', 'Down'), {
     suit: 'Clubs',
     rank: 'Ace',
     direction: 'Down',
-  }));
+  }))
 
 Deno.test('From string: up.', () =>
   assertEquals(Card.fromStringCode('🃑', 'Up'), {
     suit: 'Clubs',
     rank: 'Ace',
     direction: 'Up',
-  }));
+  }))
 
 Deno.test('Succeeds: empty.', () => {
-  let args: (Card | undefined)[];
+  let args: (Card | undefined)[]
   Card.succeeds((lhs, rhs) => {
-    args = [lhs, rhs];
-    return false;
-  });
-  assertEquals(args!, [undefined, undefined]);
-});
+    args = [lhs, rhs]
+    return false
+  })
+  assertEquals(args!, [undefined, undefined])
+})
 
 Deno.test('Succeeds: singular.', () => {
-  const cards = Card.fromString('🃑');
-  let args: (Card | undefined)[];
+  const cards = Card.fromString('🃑')
+  let args: (Card | undefined)[]
   Card.succeeds((lhs, rhs) => {
-    args = [lhs, rhs];
-    return false;
-  }, ...cards);
-  assertEquals(args!, [cards[0], undefined]);
-});
+    args = [lhs, rhs]
+    return false
+  }, ...cards)
+  assertEquals(args!, [cards[0], undefined])
+})
 
 Deno.test('Succeeds: two.', () => {
-  const cards = Card.fromString('🃑🃒');
-  let args: (Card | undefined)[];
+  const cards = Card.fromString('🃑🃒')
+  let args: (Card | undefined)[]
   Card.succeeds((lhs, rhs) => {
-    args = [lhs, rhs];
-    return false;
-  }, ...cards);
-  assertEquals(args!, cards);
-});
+    args = [lhs, rhs]
+    return false
+  }, ...cards)
+  assertEquals(args!, cards)
+})
 
 Deno.test('Succeeds: three.', () => {
-  const cards = Card.fromString('🃑🃒🃓');
-  const args: (Card | undefined)[][] = [];
+  const cards = Card.fromString('🃑🃒🃓')
+  const args: (Card | undefined)[][] = []
   Card.succeeds((lhs, rhs) => {
-    args.push([lhs, rhs]);
-    return true;
-  }, ...cards);
+    args.push([lhs, rhs])
+    return true
+  }, ...cards)
   assertEquals(args, [[cards[0], cards[1]], [cards[1], cards[2]], [
     cards[2],
     undefined,
-  ]]);
-});
+  ]])
+})
 
 for (
   const [name, directed, cards, expected] of [
@@ -177,5 +177,5 @@ for (
   Deno.test(
     `To string: ${name}.`,
     () => assertEquals(Card.toString(directed, ...cards), expected),
-  );
+  )
 }

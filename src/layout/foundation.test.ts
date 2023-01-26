@@ -1,5 +1,5 @@
-import { Card, Foundation } from '@/solitaire';
-import { assertEquals } from 'std/testing/asserts.ts';
+import { Card, Foundation } from '@/solitaire'
+import { assertEquals } from 'std/testing/asserts.ts'
 
 for (
   const [name, foundationStr, cardStr, expected] of [
@@ -9,14 +9,14 @@ for (
   ] as const
 ) {
   Deno.test(`Build buildable: ${name}.`, () => {
-    const foundation = Foundation();
-    foundation[0].push(...Card.fromString(foundationStr));
-    const cards = Card.fromString(cardStr);
-    assertEquals(Foundation.isBuildable(foundation, cards), true);
-    Foundation.build(foundation, cards);
-    assertEquals(cards.length, 0);
-    assertEquals(foundation, [Card.fromString(expected), [], [], []]);
-  });
+    const foundation = Foundation()
+    foundation[0].push(...Card.fromString(foundationStr))
+    const cards = Card.fromString(cardStr)
+    assertEquals(Foundation.isBuildable(foundation, cards), true)
+    Foundation.build(foundation, cards)
+    assertEquals(cards.length, 0)
+    assertEquals(foundation, [Card.fromString(expected), [], [], []])
+  })
 }
 
 for (
@@ -28,23 +28,23 @@ for (
   ] as const
 ) {
   Deno.test(`Forbid building: ${name}.`, () => {
-    const foundation = Foundation();
-    foundation[0].push(...Card.fromString(foundationStr));
-    const cards = Card.fromString(cardStr);
-    assertEquals(Foundation.isBuildable(foundation, cards), false);
-    Foundation.build(foundation, cards);
-    assertEquals(cards.length, 1);
-  });
+    const foundation = Foundation()
+    foundation[0].push(...Card.fromString(foundationStr))
+    const cards = Card.fromString(cardStr)
+    assertEquals(Foundation.isBuildable(foundation, cards), false)
+    Foundation.build(foundation, cards)
+    assertEquals(cards.length, 1)
+  })
 }
 
 Deno.test('Build card down.', () => {
-  const foundation = Foundation();
-  foundation[0].push(...Card.fromString('🃑🃒🃓'));
-  const cards = Card.fromString('🃔', 'Down');
-  assertEquals(Foundation.isBuildable(foundation, cards), false);
-  Foundation.build(foundation, cards);
-  assertEquals(cards.length, 1);
-});
+  const foundation = Foundation()
+  foundation[0].push(...Card.fromString('🃑🃒🃓'))
+  const cards = Card.fromString('🃔', 'Down')
+  assertEquals(Foundation.isBuildable(foundation, cards), false)
+  Foundation.build(foundation, cards)
+  assertEquals(cards.length, 1)
+})
 
 for (
   const [name, foundation, built] of [
@@ -70,7 +70,7 @@ for (
   Deno.test(
     `Is built: ${name}.`,
     () => assertEquals(Foundation.isBuilt(<Foundation> foundation), built),
-  );
+  )
 }
 
 for (
@@ -85,5 +85,5 @@ for (
     assertEquals(
       Foundation.isPillarBuilt(Card.fromString(foundationStr)),
       built,
-    ));
+    ))
 }

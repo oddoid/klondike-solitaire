@@ -1,4 +1,4 @@
-import { Card } from '@/solitaire';
+import { Card } from '@/solitaire'
 
 /**
  * Returns true if right card directly succeeds left.
@@ -10,4 +10,4 @@ import { Card } from '@/solitaire';
 export type Succeeds = (
   lhs: Readonly<Card> | undefined,
   rhs: Readonly<Card> | undefined,
-) => boolean;
+) => boolean

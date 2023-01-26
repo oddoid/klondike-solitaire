@@ -1,11 +1,11 @@
-import { Immutable, Inverse } from '@/oidlib';
+import { Immutable, Inverse } from '@/oidlib'
 
 /**
  * Pip or face denomination. Number cards are usually represented with a
  * quantity of pips equal to the rank's value. For example, a rank of five
  * often has five pip symbols.
  */
-export type Rank = Parameters<typeof Rank.values['has']>[0];
+export type Rank = Parameters<typeof Rank.values['has']>[0]
 
 // deno-fmt-ignore
 export type RankASCII = 'A' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K';
@@ -29,7 +29,7 @@ export namespace Rank {
         'King',
       ] as const,
     ),
-  );
+  )
 
   /**
    * The contiguous relative ordering of each rank. Not to be confused with
@@ -38,7 +38,7 @@ export namespace Rank {
   export const toOrder = Immutable([...Rank.values].reduce(
     (order, value, index) => ({ ...order, [value]: index }),
     <Readonly<Record<Rank, number>>> {},
-  ));
+  ))
 
   /**
    * The pip value of a rank used for scoring. Not to be confused with order.
@@ -59,12 +59,12 @@ export namespace Rank {
       Queen: 13,
       King: 14,
     } as const,
-  ) satisfies Record<Rank, number>;
+  ) satisfies Record<Rank, number>
 
   /** Point to Rank map. */
   export const fromPoint: Readonly<Record<number, Rank>> = Immutable(
     Inverse(toPoint),
-  );
+  )
 
   export const toASCII = Immutable(
     {
@@ -82,5 +82,5 @@ export namespace Rank {
       Queen: 'Q',
       King: 'K',
     } as const,
-  ) satisfies Record<Rank, string>;
+  ) satisfies Record<Rank, string>
 }
