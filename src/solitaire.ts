@@ -44,7 +44,7 @@ export function Solitaire(
   drawSize ??= Uint(3)
   if (random == null) {
     const rnd = new Random(I32.mod(Date.now()))
-    random = () => rnd.fraction
+    random = () => rnd.fraction()
   }
   tableauSize ??= Uint(7)
   const stock = Pile.newDeck()
