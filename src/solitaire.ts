@@ -1,4 +1,4 @@
-import { ArrayUtil, I32, NonNull, Random, Str, Uint, UintXY } from '@/oidlib'
+import { ArrayUtil, I32, NonNull, Random, Str, Uint, UintXY } from '@/ooz'
 import {
   Card,
   Foundation,

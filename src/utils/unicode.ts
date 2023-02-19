@@ -1,4 +1,4 @@
-import { assert, Int } from '@/oidlib'
+import { assert, Int } from '@/ooz'
 
 export namespace Unicode {
   export const ideographicSpace = '　'

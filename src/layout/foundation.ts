@@ -1,4 +1,4 @@
-import { Immutable, UintXY } from '@/oidlib'
+import { Immutable, UintXY } from '@/ooz'
 import {
   Card,
   Pile,

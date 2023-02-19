@@ -7,7 +7,7 @@ import {
   SuitASCII,
   Visibility,
 } from '@/solitaire'
-import { assertNonNull, Immutable, NonNull } from '@/oidlib'
+import { assertNonNull, Immutable, NonNull } from '@/ooz'
 
 /**
  * See

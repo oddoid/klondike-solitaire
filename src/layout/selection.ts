@@ -1,4 +1,4 @@
-import { UintXY } from '@/oidlib'
+import { UintXY } from '@/ooz'
 import { Card } from '@/solitaire'
 
 export interface Selection {

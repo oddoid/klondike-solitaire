@@ -1,4 +1,4 @@
-import { Immutable, Inverse } from '@/oidlib'
+import { Immutable, Inverse } from '@/ooz'
 
 /**
  * Pip or face denomination. Number cards are usually represented with a

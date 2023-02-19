@@ -1,6 +1,6 @@
 import { assertEquals } from 'std/testing/asserts.ts'
 import { Card, Pile, Tableau } from '@/solitaire'
-import { Uint } from '@/oidlib'
+import { Uint } from '@/ooz'
 
 Deno.test('Tableau.', () => {
   const stock = Pile.newDeck()

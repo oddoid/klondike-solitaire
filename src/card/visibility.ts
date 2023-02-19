@@ -1,4 +1,4 @@
-import { Immutable } from '@/oidlib'
+import { Immutable } from '@/ooz'
 
 /**
  * When directed, respect card direction. That is, face down cards are

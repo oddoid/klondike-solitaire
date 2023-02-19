@@ -1,4 +1,4 @@
-import { assert, Uint, UintXY } from '@/oidlib'
+import { assert, Uint, UintXY } from '@/ooz'
 import {
   Card,
   Pile,

@@ -1,4 +1,4 @@
-import { Immutable, Inverse } from '@/oidlib'
+import { Immutable, Inverse } from '@/ooz'
 import { Color } from '@/solitaire'
 
 /** Pip category. */

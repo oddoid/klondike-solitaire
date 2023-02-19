@@ -1,4 +1,4 @@
-import { Immutable } from '@/oidlib'
+import { Immutable } from '@/ooz'
 
 /** Suit primary hue. */
 export type Color = Parameters<typeof Color.values['has']>[0]

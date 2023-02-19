@@ -1,4 +1,4 @@
-import { Immutable } from '@/oidlib'
+import { Immutable } from '@/ooz'
 
 /**
  * The physical orientation of the card. All card backs are identical and
