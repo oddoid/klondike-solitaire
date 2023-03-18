@@ -3,7 +3,7 @@ import {
   Card,
   Pile,
   Rank,
-  Selection,
+  Selected,
   Succeeds,
   Suit,
   Visibility,
@@ -75,7 +75,7 @@ export namespace Foundation {
   export function select(
     self: Readonly<Foundation>,
     card: Readonly<Card>,
-  ): Selection | undefined {
+  ): Selected | undefined {
     for (const [index, foundation] of self.entries()) {
       const y = foundation.indexOf(card)
       if (y == -1) continue

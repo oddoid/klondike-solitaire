@@ -3,7 +3,7 @@ import {
   Card,
   Pile,
   Rank,
-  Selection,
+  Selected,
   Succeeds,
   Suit,
   Visibility,
@@ -79,7 +79,7 @@ export namespace Tableau {
   export function select(
     self: Readonly<Tableau>,
     card: Readonly<Card>,
-  ): Selection | undefined {
+  ): Selected | undefined {
     for (const [x, lane] of self.entries()) {
       const y = lane.indexOf(card)
       if (y == -1) continue

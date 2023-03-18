@@ -10,7 +10,7 @@ Deno.test('Deal', async (test) => {
   await test.step(
     'Set the game.',
     async (test) => {
-      solitaire = Solitaire(undefined, () => 1 - Number.EPSILON)
+      solitaire = Solitaire(() => 1 - Number.EPSILON)
       await assertSnapshot(test, Solitaire.toString(solitaire))
     },
   )
@@ -105,9 +105,9 @@ Deno.test('Playthrough', async (test) => {
     'Set the game.',
     async (test) => {
       solitaire = Solitaire(
-        Uint(3),
         () => 1 - Number.EPSILON,
         Uint(0),
+        Uint(3),
         Uint(7),
       )
       Solitaire.deal(solitaire)

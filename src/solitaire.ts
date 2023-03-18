@@ -3,7 +3,7 @@ import {
   Card,
   Foundation,
   Pile,
-  Selection,
+  Selected,
   Tableau,
   Visibility,
 } from '@/solitaire'
@@ -17,7 +17,7 @@ export interface Solitaire {
   readonly foundation: Foundation
   /** Squared face-down deck. The top is the last index. */
   readonly stock: Card[]
-  selected?: Selection
+  selected?: Selected
   readonly tableau: Tableau
   /**
    * Cards are discarded to the waste squared, face-up. Only the top card, if
@@ -36,9 +36,9 @@ export interface Solitaire {
 }
 
 export function Solitaire(
-  drawSize?: Uint,
   random?: () => number,
   wins?: Uint,
+  drawSize?: Uint,
   tableauSize?: Uint,
 ): Solitaire {
   drawSize ??= Uint(3)
@@ -81,7 +81,7 @@ export namespace Solitaire {
    * - Foundation and tableau: if the top card is pointed at and face-down, flip
    *   it. Otherwise, select all cards from card to the top.
    */
-  export function point(self: Solitaire, card: Card): Selection | undefined {
+  export function point(self: Solitaire, card: Card): Selected | undefined {
     deselect(self)
 
     const stockY = self.stock.indexOf(card)
