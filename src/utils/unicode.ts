@@ -34,6 +34,6 @@ export namespace Unicode {
    */
   function* genIntDigits(val: Int): Generator<Int> {
     if (val == 0) return yield Int(0)
-    for (; val > 0; val = Int.trunc(val / 10)) yield Int(val % 10)
+    for (; val > 0; val = Int.clamp(val / 10)) yield Int(val % 10)
   }
 }
