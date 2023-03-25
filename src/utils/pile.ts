@@ -17,13 +17,13 @@ export namespace Pile {
     const height = piles.reduce((max, pile) => Math.max(max, pile.length), 0)
     let str = ''
     for (let y = 0; y < height; y++) {
-      if (str != '') str += '\n'
+      if (str !== '') str += '\n'
       for (let x = 0; x < piles.length; x++) {
         str += piles[x]![y] == null
-          ? y == 0 ? '🃟' : Unicode.ideographicSpace
+          ? y === 0 ? '🃟' : Unicode.ideographicSpace
           : Card.toString(visibility, piles[x]![y]!)
       }
     }
-    return str == '' ? '🃟'.repeat(piles.length) : str
+    return str === '' ? '🃟'.repeat(piles.length) : str
   }
 }

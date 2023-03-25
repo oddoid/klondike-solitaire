@@ -47,7 +47,7 @@ for (
           (lhs, rhs) => {
             if (lhs == null) return false
             if (rhs == null) return true
-            return Rank.toOrder[lhs.rank] + 1 == Rank.toOrder[rhs.rank]
+            return Rank.toOrder[lhs.rank] + 1 === Rank.toOrder[rhs.rank]
           },
           ...Card.fromString(pileStr),
         ),

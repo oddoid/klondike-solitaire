@@ -43,19 +43,19 @@ export function Tableau(lanes: Uint): Tableau {
  * - Colors alternate and the rank is the next lesser adjacent.
  */
 const succeeds: Succeeds = (lhs, rhs) => {
-  if (lhs?.direction == 'Down' || rhs?.direction == 'Down') return false
+  if (lhs?.direction === 'Down' || rhs?.direction === 'Down') return false
   if (rhs == null) return lhs != null
-  if (lhs == null) return rhs.rank == 'King'
+  if (lhs == null) return rhs.rank === 'King'
   return (
-    Suit.toColor[lhs.suit] != Suit.toColor[rhs.suit] &&
-    Rank.toOrder[lhs.rank] == Rank.toOrder[rhs.rank] + 1
+    Suit.toColor[lhs.suit] !== Suit.toColor[rhs.suit] &&
+    Rank.toOrder[lhs.rank] === Rank.toOrder[rhs.rank] + 1
   )
 }
 
 export namespace Tableau {
   export function deal(self: Tableau, stock: Card[]): void {
     for (const [index, lane] of self.entries()) {
-      assert(lane.length == 0, 'Tableau must be reset before dealt.')
+      assert(lane.length === 0, 'Tableau must be reset before dealt.')
       const cards = stock.splice(-index - 1)
       for (const card of cards) card.direction = 'Down'
       lane.push(...cards)
@@ -82,7 +82,7 @@ export namespace Tableau {
   ): Selected | undefined {
     for (const [x, lane] of self.entries()) {
       const y = lane.indexOf(card)
-      if (y == -1) continue
+      if (y === -1) continue
       return { cards: lane.splice(y), pile: 'Tableau', xy: new UintXY(x, y) }
     }
   }

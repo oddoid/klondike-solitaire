@@ -33,7 +33,7 @@ export namespace Unicode {
    * to most.
    */
   function* genIntDigits(val: Int): Generator<Int> {
-    if (val == 0) return yield Int(0)
+    if (val === 0) return yield Int(0)
     for (; val > 0; val = Int.clamp(val / 10)) yield Int(val % 10)
   }
 }

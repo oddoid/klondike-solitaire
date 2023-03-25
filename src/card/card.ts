@@ -46,7 +46,7 @@ export namespace Card {
     direction: Direction,
     ...cards: readonly Readonly<Card>[]
   ): boolean {
-    return cards.every((card) => card.direction == direction)
+    return cards.every((card) => card.direction === direction)
   }
 
   /**
@@ -79,7 +79,7 @@ export namespace Card {
     succeeds: Succeeds,
     ...cards: readonly Readonly<Card>[]
   ): boolean {
-    if (cards.length == 0) return succeeds(undefined, undefined)
+    if (cards.length === 0) return succeeds(undefined, undefined)
     for (let index = 0; index <= (cards.length - 1); index++) {
       if (!succeeds(cards[index], cards[index + 1])) return false
     }
@@ -108,7 +108,7 @@ function cardToString(
   visibility: Visibility,
   card: Readonly<Card>,
 ): string {
-  if (visibility == 'Directed' && card.direction == 'Down') return '🂠'
+  if (visibility === 'Directed' && card.direction === 'Down') return '🂠'
   const point = unicode.rangeStart +
     (unicode.suitMax - Suit.toOrder[card.suit]) * unicode.rankSize +
     Rank.toPoint[card.rank]

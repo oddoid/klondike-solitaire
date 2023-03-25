@@ -36,11 +36,11 @@ export function Foundation(): Foundation {
  * - Suits match and the rank is the next greater adjacent.
  */
 const succeeds: Succeeds = (lhs, rhs) => {
-  if (lhs?.direction == 'Down' || rhs?.direction == 'Down') return false
+  if (lhs?.direction === 'Down' || rhs?.direction === 'Down') return false
   if (rhs == null) return lhs != null
-  if (lhs == null) return rhs.rank == 'Ace'
-  if (lhs.suit != rhs.suit) return false
-  return (Rank.toOrder[lhs.rank] + 1) == Rank.toOrder[rhs.rank]
+  if (lhs == null) return rhs.rank === 'Ace'
+  if (lhs.suit !== rhs.suit) return false
+  return (Rank.toOrder[lhs.rank] + 1) === Rank.toOrder[rhs.rank]
 }
 
 const suitToIndex = Immutable(
@@ -78,7 +78,7 @@ export namespace Foundation {
   ): Selected | undefined {
     for (const [index, foundation] of self.entries()) {
       const y = foundation.indexOf(card)
-      if (y == -1) continue
+      if (y === -1) continue
       return {
         cards: foundation.splice(y),
         pile: 'Foundation',
@@ -96,7 +96,7 @@ export namespace Foundation {
   export function isPillarBuilt(
     ...pillars: readonly (readonly Readonly<Card>[])[]
   ): boolean {
-    return pillars.every((pillar) => pillar.at(-1)?.rank == 'King')
+    return pillars.every((pillar) => pillar.at(-1)?.rank === 'King')
   }
 
   export function toString(

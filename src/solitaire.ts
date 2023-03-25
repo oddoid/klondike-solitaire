@@ -85,8 +85,8 @@ export namespace Solitaire {
     deselect(self)
 
     const stockY = self.stock.indexOf(card)
-    if (stockY != -1) {
-      if (stockY != self.stock.length - 1) return
+    if (stockY !== -1) {
+      if (stockY !== self.stock.length - 1) return
       const y = Math.max(0, stockY - (self.drawSize - 1))
       const cards = self.stock.splice(y).reverse()
       for (const card of cards) card.direction = 'Up'
@@ -95,7 +95,7 @@ export namespace Solitaire {
     }
 
     const wasteY = self.waste.indexOf(card)
-    if (wasteY != -1) {
+    if (wasteY !== -1) {
       self.selected = {
         cards: self.waste.splice(wasteY),
         pile: 'Waste',
@@ -112,13 +112,13 @@ export namespace Solitaire {
     // Assign to selected as the above operation is a mutation that must be
     // completed or deselected.
     const { cards } = self.selected
-    if (cards.length == 1 && cards[0]?.direction == 'Down') {
+    if (cards.length === 1 && cards[0]?.direction === 'Down') {
       cards[0].direction = 'Up'
       deselect(self)
       // self.selected is now cleared.
     }
     // Facedown cards cannot be moved.
-    // if (cards[0]?.direction == 'Down') deselect(self);
+    // if (cards[0]?.direction === 'Down') deselect(self);
     return self.selected
   }
 
@@ -136,7 +136,7 @@ export namespace Solitaire {
     at: { type: 'Foundation' } | { type: 'Tableau'; x: Uint },
   ): boolean {
     if (self.selected == null) return false
-    if (at.type == 'Foundation') {
+    if (at.type === 'Foundation') {
       return Foundation.isBuildable(self.foundation, self.selected.cards)
     }
     return Tableau.isBuildable(
@@ -163,7 +163,7 @@ export namespace Solitaire {
     )
     const unreservedWaste = self.waste.slice(0, -self.drawSize)
     const waste = padCharEnd(
-      visibility == 'Directed'
+      visibility === 'Directed'
         ? '🂠'.repeat(unreservedWaste.length)
         : Card.toString(visibility, ...unreservedWaste),
       Uint(1),
@@ -186,16 +186,16 @@ ${selected}
     at: { type: 'Foundation' } | { type: 'Tableau'; x: Uint },
   ): void {
     if (self.selected == null) return
-    if (at.type == 'Foundation') {
+    if (at.type === 'Foundation') {
       Foundation.build(self.foundation, self.selected.cards)
     } else Tableau.build(NonNull(self.tableau[at.x]), self.selected.cards)
-    if (self.selected.cards.length != 0) return
+    if (self.selected.cards.length !== 0) return
     delete self.selected
   }
 
   export function deselect(self: Solitaire): void {
     if (self.selected == null) return
-    const pile = self.selected.pile == 'Waste'
+    const pile = self.selected.pile === 'Waste'
       ? self.waste
       : self[Str.uncapitalize(self.selected.pile)][self.selected.xy.x]!
     pile.push(...self.selected.cards)
