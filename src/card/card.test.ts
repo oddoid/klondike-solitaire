@@ -1,13 +1,22 @@
-import { Card, Pile, Rank } from '@/solitaire'
+import {
+  Card,
+  cardFromString,
+  cardFromStringCode,
+  cardIsDirected,
+  cardSucceeds,
+  cardToString,
+  newDeck,
+  rankToOrder,
+} from '@/solitaire'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 for (
   const [name, cards, down, up] of [
-    ['one up', [Card.fromStringCode('🃑')], false, true],
-    ['one down', [Card.fromStringCode('🃑', 'Down')], true, false],
+    ['one up', [cardFromStringCode('🃑')], false, true],
+    ['one down', [cardFromStringCode('🃑', 'Down')], true, false],
     [
       'mix',
-      [Card.fromStringCode('🃑', 'Down'), Card.fromStringCode('🃑', 'Up')],
+      [cardFromStringCode('🃑', 'Down'), cardFromStringCode('🃑', 'Up')],
       false,
       false,
     ],
@@ -16,8 +25,8 @@ for (
   Deno.test(
     `isDirected: ${name}.`,
     () => {
-      assertEquals(Card.isDirected('Down', ...cards), down)
-      assertEquals(Card.isDirected('Up', ...cards), up)
+      assertEquals(cardIsDirected('Down', ...cards), down)
+      assertEquals(cardIsDirected('Up', ...cards), up)
     },
   )
 }
@@ -43,47 +52,47 @@ for (
     `Succeeds: ${name}.`,
     () =>
       assertEquals(
-        Card.succeeds(
+        cardSucceeds(
           (lhs, rhs) => {
             if (lhs == null) return false
             if (rhs == null) return true
-            return Rank.toOrder[lhs.rank] + 1 === Rank.toOrder[rhs.rank]
+            return rankToOrder[lhs.rank] + 1 === rankToOrder[rhs.rank]
           },
-          ...Card.fromString(pileStr),
+          ...cardFromString(pileStr),
         ),
         expected,
       ),
   )
 }
 
-for (const card of Pile.newDeck('Up')) {
+for (const card of newDeck('Up')) {
   Deno.test(
-    `From string: ${Card.toString('Directed', card)}.`,
+    `From string: ${cardToString('Directed', card)}.`,
     () =>
       assertEquals(
-        Card.fromStringCode(Card.toString('Directed', card)),
+        cardFromStringCode(cardToString('Directed', card)),
         card,
       ),
   )
 }
 
 Deno.test('From string: unknown.', () => {
-  assertThrows(() => Card.fromStringCode('A'))
+  assertThrows(() => cardFromStringCode('A'))
 })
 
 Deno.test('From string: empty.', () => {
-  assertThrows(() => Card.fromStringCode(''))
+  assertThrows(() => cardFromStringCode(''))
 })
 
 Deno.test('From string: down.', () =>
-  assertEquals(Card.fromStringCode('🃑', 'Down'), {
+  assertEquals(cardFromStringCode('🃑', 'Down'), {
     suit: 'Clubs',
     rank: 'Ace',
     direction: 'Down',
   }))
 
 Deno.test('From string: up.', () =>
-  assertEquals(Card.fromStringCode('🃑', 'Up'), {
+  assertEquals(cardFromStringCode('🃑', 'Up'), {
     suit: 'Clubs',
     rank: 'Ace',
     direction: 'Up',
@@ -91,7 +100,7 @@ Deno.test('From string: up.', () =>
 
 Deno.test('Succeeds: empty.', () => {
   let args: (Card | undefined)[]
-  Card.succeeds((lhs, rhs) => {
+  cardSucceeds((lhs, rhs) => {
     args = [lhs, rhs]
     return false
   })
@@ -99,9 +108,9 @@ Deno.test('Succeeds: empty.', () => {
 })
 
 Deno.test('Succeeds: singular.', () => {
-  const cards = Card.fromString('🃑')
+  const cards = cardFromString('🃑')
   let args: (Card | undefined)[]
-  Card.succeeds((lhs, rhs) => {
+  cardSucceeds((lhs, rhs) => {
     args = [lhs, rhs]
     return false
   }, ...cards)
@@ -109,9 +118,9 @@ Deno.test('Succeeds: singular.', () => {
 })
 
 Deno.test('Succeeds: two.', () => {
-  const cards = Card.fromString('🃑🃒')
+  const cards = cardFromString('🃑🃒')
   let args: (Card | undefined)[]
-  Card.succeeds((lhs, rhs) => {
+  cardSucceeds((lhs, rhs) => {
     args = [lhs, rhs]
     return false
   }, ...cards)
@@ -119,9 +128,9 @@ Deno.test('Succeeds: two.', () => {
 })
 
 Deno.test('Succeeds: three.', () => {
-  const cards = Card.fromString('🃑🃒🃓')
+  const cards = cardFromString('🃑🃒🃓')
   const args: (Card | undefined)[][] = []
-  Card.succeeds((lhs, rhs) => {
+  cardSucceeds((lhs, rhs) => {
     args.push([lhs, rhs])
     return true
   }, ...cards)
@@ -136,7 +145,7 @@ for (
     [
       'deck undirected',
       'Undirected',
-      Pile.newDeck(),
+      newDeck(),
       '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋🃍🃎🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂽🂾🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮',
     ],
     [
@@ -176,6 +185,6 @@ for (
 ) {
   Deno.test(
     `To string: ${name}.`,
-    () => assertEquals(Card.toString(directed, ...cards), expected),
+    () => assertEquals(cardToString(directed, ...cards), expected),
   )
 }

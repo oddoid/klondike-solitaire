@@ -1,12 +1,13 @@
-import { assert, Uint, UintXY } from '@/ooz'
+import { assert, XY } from '@/ooz'
 import {
   Card,
-  Pile,
-  Rank,
-  Selected,
-  Succeeds,
-  Suit,
-  Visibility,
+  CardsSelected,
+  CardSucceeds,
+  cardSucceeds,
+  CardVisibility,
+  pileToString,
+  rankToOrder,
+  suitToColor,
 } from '@/solitaire'
 
 /**
@@ -28,7 +29,7 @@ export type Tableau = readonly Card[][]
  * insufficient stock, the later lanes my be incomplete. The number of cards
  * used is the lesser of `lanes * (lanes + 1) / 2` and `stock.length`.
  */
-export function Tableau(lanes: Uint): Tableau {
+export function Tableau(lanes: number): Tableau {
   assert(lanes > 0, `Tableau size must be greater than zero but was ${lanes}.`)
   const tableau = []
   for (let i = 0; i < lanes; i++) tableau.push([])
@@ -42,64 +43,65 @@ export function Tableau(lanes: Uint): Tableau {
  * - No preceding card (left) and right is a king.
  * - Colors alternate and the rank is the next lesser adjacent.
  */
-const succeeds: Succeeds = (lhs, rhs) => {
+const succeeds: CardSucceeds = (lhs, rhs) => {
   if (lhs?.direction === 'Down' || rhs?.direction === 'Down') return false
   if (rhs == null) return lhs != null
   if (lhs == null) return rhs.rank === 'King'
   return (
-    Suit.toColor[lhs.suit] !== Suit.toColor[rhs.suit] &&
-    Rank.toOrder[lhs.rank] === Rank.toOrder[rhs.rank] + 1
+    suitToColor[lhs.suit] !== suitToColor[rhs.suit] &&
+    rankToOrder[lhs.rank] === rankToOrder[rhs.rank] + 1
   )
 }
 
-export namespace Tableau {
-  export function deal(self: Tableau, stock: Card[]): void {
-    for (const [index, lane] of self.entries()) {
-      assert(lane.length === 0, 'Tableau must be reset before dealt.')
-      const cards = stock.splice(-index - 1)
-      for (const card of cards) card.direction = 'Down'
-      lane.push(...cards)
-    }
+export function tableauDeal(self: Tableau, stock: Card[]): void {
+  for (const [index, lane] of self.entries()) {
+    assert(lane.length === 0, 'Tableau must be reset before dealt.')
+    const cards = stock.splice(-index - 1)
+    for (const card of cards) card.direction = 'Down'
+    lane.push(...cards)
   }
+}
 
-  /**
-   * Use:
-   * - Move cards from one tableau lane to another.
-   * - Move cards from the reserve or wastepile to a tableau lane.
-   * - Worry back a foundation card back to a tableau lane.
-   *
-   * Invoke `isBuildable()` first to verify the card is buildable. The cards
-   * array is emptied if built.
-   */
-  export function build(lane: Readonly<Card>[], cards: Readonly<Card>[]): void {
-    if (!isBuildable(lane, cards)) return
-    lane.push(...cards.splice(0))
-  }
+/**
+ * Use:
+ * - Move cards from one tableau lane to another.
+ * - Move cards from the reserve or wastepile to a tableau lane.
+ * - Worry back a foundation card back to a tableau lane.
+ *
+ * Invoke `isBuildable()` first to verify the card is buildable. The cards
+ * array is emptied if built.
+ */
+export function tableauBuild(
+  lane: Readonly<Card>[],
+  cards: Readonly<Card>[],
+): void {
+  if (!tableauIsBuildable(lane, cards)) return
+  lane.push(...cards.splice(0))
+}
 
-  export function select(
-    self: Readonly<Tableau>,
-    card: Readonly<Card>,
-  ): Selected | undefined {
-    for (const [x, lane] of self.entries()) {
-      const y = lane.indexOf(card)
-      if (y === -1) continue
-      return { cards: lane.splice(y), pile: 'Tableau', xy: new UintXY(x, y) }
-    }
+export function tableauSelect(
+  self: Readonly<Tableau>,
+  card: Readonly<Card>,
+): CardsSelected | undefined {
+  for (const [x, lane] of self.entries()) {
+    const y = lane.indexOf(card)
+    if (y === -1) continue
+    return { cards: lane.splice(y), pile: 'Tableau', xy: new XY(x, y) }
   }
+}
 
-  /** Test whether a card can be built on tableau lane. */
-  export function isBuildable(
-    lane: readonly Readonly<Card>[],
-    cards: readonly Readonly<Card>[],
-  ): boolean {
-    if (!Card.succeeds(succeeds, ...cards)) return false
-    return succeeds(lane.at(-1), cards[0])
-  }
+/** Test whether a card can be built on tableau lane. */
+export function tableauIsBuildable(
+  lane: readonly Readonly<Card>[],
+  cards: readonly Readonly<Card>[],
+): boolean {
+  if (!cardSucceeds(succeeds, ...cards)) return false
+  return succeeds(lane.at(-1), cards[0])
+}
 
-  export function toString(
-    self: Readonly<Tableau>,
-    visibility: Visibility = 'Directed',
-  ): string {
-    return Pile.toString(self, visibility)
-  }
+export function tableauToString(
+  self: Readonly<Tableau>,
+  visibility: CardVisibility = 'Directed',
+): string {
+  return pileToString(self, visibility)
 }

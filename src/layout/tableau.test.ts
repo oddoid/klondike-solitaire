@@ -1,16 +1,25 @@
+import {
+  cardFromString,
+  cardFromStringCode,
+  cardIsDirected,
+  cardToString,
+  newDeck,
+  Tableau,
+  tableauBuild,
+  tableauDeal,
+  tableauIsBuildable,
+} from '@/solitaire'
 import { assertEquals } from 'std/testing/asserts.ts'
-import { Card, Pile, Tableau } from '@/solitaire'
-import { Uint } from '@/ooz'
 
-Deno.test('Tableau.', () => {
-  const stock = Pile.newDeck()
-  const tableau = Tableau(Uint(7))
-  Tableau.deal(tableau, stock)
+Deno.test('tableau', () => {
+  const stock = newDeck()
+  const tableau = Tableau(7)
+  tableauDeal(tableau, stock)
   assertEquals(
-    Card.toString('Undirected', ...stock),
+    cardToString('Undirected', ...stock),
     '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞' + '🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋',
   )
-  assertEquals(tableau.map((pile) => Card.toString('Undirected', ...pile)), [
+  assertEquals(tableau.map((pile) => cardToString('Undirected', ...pile)), [
     '🂮',
     '🂫🂭',
     '🂨🂩🂪',
@@ -20,17 +29,17 @@ Deno.test('Tableau.', () => {
     '🃍🃎🂱🂲🂳🂴🂵',
   ])
   assertEquals(
-    tableau.every((pile) => Card.isDirected('Down', ...pile)),
+    tableau.every((pile) => cardIsDirected('Down', ...pile)),
     true,
   )
 })
 
 Deno.test('Tableau from insufficient stock.', () => {
-  const stock = Card.fromString('🂺🂻🂽🂾🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮')
-  const tableau = Tableau(Uint(7))
-  Tableau.deal(tableau, stock)
+  const stock = cardFromString('🂺🂻🂽🂾🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮')
+  const tableau = Tableau(7)
+  tableauDeal(tableau, stock)
   assertEquals(stock, [])
-  assertEquals(tableau.map((pile) => Card.toString('Directed', ...pile)), [
+  assertEquals(tableau.map((pile) => cardToString('Directed', ...pile)), [
     '🂠',
     '🂠🂠',
     '🂠🂠🂠',
@@ -49,15 +58,15 @@ for (
   ] as const
 ) {
   Deno.test(`build buildable ${name}`, () => {
-    const pile = Card.fromString(pileStr, 'Down')
+    const pile = cardFromString(pileStr, 'Down')
     if (pile.length > 0) pile.at(-1)!.direction = 'Up'
-    const cards = Card.fromString(cardStr)
-    assertEquals(Tableau.isBuildable(pile, cards), true)
-    Tableau.build(pile, cards)
+    const cards = cardFromString(cardStr)
+    assertEquals(tableauIsBuildable(pile, cards), true)
+    tableauBuild(pile, cards)
     assertEquals(
       pile,
       [...expected].map((card, i, array) =>
-        Card.fromStringCode(card, i >= array.length - 2 ? 'Up' : 'Down')
+        cardFromStringCode(card, i >= array.length - 2 ? 'Up' : 'Down')
       ),
     )
   })
@@ -73,27 +82,27 @@ for (
   ] as const
 ) {
   Deno.test(`build non-buildable ${name}`, () => {
-    const pile = Card.fromString(pileStr, 'Down')
+    const pile = cardFromString(pileStr, 'Down')
     if (pile.length > 0) pile.at(-1)!.direction = 'Up'
-    const cards = Card.fromString(cardStr)
-    assertEquals(Tableau.isBuildable(pile, cards), false)
-    Tableau.build(pile, cards)
+    const cards = cardFromString(cardStr)
+    assertEquals(tableauIsBuildable(pile, cards), false)
+    tableauBuild(pile, cards)
     assertEquals(cards.length, 1)
   })
 }
 
 Deno.test('build card Down', () => {
-  const pile = Card.fromString('🃞🃍🃛')
-  const cards = Card.fromString('🃊', 'Down')
-  assertEquals(Tableau.isBuildable(pile, cards), false)
-  Tableau.build(pile, cards)
+  const pile = cardFromString('🃞🃍🃛')
+  const cards = cardFromString('🃊', 'Down')
+  assertEquals(tableauIsBuildable(pile, cards), false)
+  tableauBuild(pile, cards)
   assertEquals(cards.length, 1)
 })
 
 Deno.test('build pile Down', () => {
-  const pile = Card.fromString('🃞🃍🃛', 'Down')
-  const cards = Card.fromString('🃊')
-  assertEquals(Tableau.isBuildable(pile, cards), false)
-  Tableau.build(pile, cards)
+  const pile = cardFromString('🃞🃍🃛', 'Down')
+  const cards = cardFromString('🃊')
+  assertEquals(tableauIsBuildable(pile, cards), false)
+  tableauBuild(pile, cards)
   assertEquals(cards.length, 1)
 })
