@@ -23,33 +23,15 @@ Deno.test('Deal', async (test) => {
   )
 
   await test.step('The foundation piles are empty.', (test) => {
-    assertEquals(
-      cardToString('Directed', ...solitaire.foundation[0]),
-      '',
-    )
-    assertEquals(
-      cardToString('Directed', ...solitaire.foundation[1]),
-      '',
-    )
-    assertEquals(
-      cardToString('Directed', ...solitaire.foundation[2]),
-      '',
-    )
-    assertEquals(
-      cardToString('Directed', ...solitaire.foundation[3]),
-      '',
-    )
-    assertSnapshot(
-      test,
-      foundationToString(solitaire.foundation, 'Directed'),
-    )
+    assertEquals(cardToString('Directed', ...solitaire.foundation[0]), '')
+    assertEquals(cardToString('Directed', ...solitaire.foundation[1]), '')
+    assertEquals(cardToString('Directed', ...solitaire.foundation[2]), '')
+    assertEquals(cardToString('Directed', ...solitaire.foundation[3]), '')
+    assertSnapshot(test, foundationToString(solitaire.foundation, 'Directed'))
   })
 
   await test.step('The waste is empty.', () => {
-    assertEquals(
-      solitaire.waste.length,
-      0,
-    )
+    assertEquals(solitaire.waste.length, 0)
   })
 
   await test.step(
