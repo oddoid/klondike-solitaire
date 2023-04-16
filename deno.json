@@ -13,7 +13,7 @@
   },
   "imports": {
     "@/solitaire": "./mod.ts",
-    "@/ooz": "https://deno.land/x/ooz@v0.0.16/mod.ts",
+    "@/ooz": "https://deno.land/x/ooz@v0.0.17/mod.ts",
     "std/": "https://deno.land/std@0.179.0/"
   },
   "lint": {
