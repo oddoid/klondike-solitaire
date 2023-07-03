@@ -1,15 +1,17 @@
+import { assertAlmostEquals, assertEquals } from 'std/testing/asserts.ts'
+import { assertSnapshot } from 'std/testing/snapshot.ts'
+import { cardToString } from './card/card.ts'
+import { foundationToString } from './layout/foundation.ts'
 import {
-  cardToString,
-  foundationToString,
+  shuffle,
   Solitaire,
   solitaireBuild,
   solitaireDeal,
   solitairePoint,
   solitaireToString,
-} from '@/solitaire'
-import { assertEquals } from 'std/testing/asserts.ts'
-import { assertSnapshot } from '../../ooz/src/test/test-util.ts'
-// import { assertSnapshot } from '@/ooz';
+  swapIndices,
+  uncapitalize,
+} from './solitaire.ts'
 
 Deno.test('Deal', async (test) => {
   let solitaire: Solitaire
@@ -18,7 +20,7 @@ Deno.test('Deal', async (test) => {
     'Set the game.',
     async (test) => {
       solitaire = Solitaire(() => 1 - Number.EPSILON)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -27,7 +29,9 @@ Deno.test('Deal', async (test) => {
     assertEquals(cardToString('Directed', ...solitaire.foundation[1]), '')
     assertEquals(cardToString('Directed', ...solitaire.foundation[2]), '')
     assertEquals(cardToString('Directed', ...solitaire.foundation[3]), '')
-    assertSnapshot(test, foundationToString(solitaire.foundation, 'Directed'))
+    assertSnapshot(test, foundationToString(solitaire.foundation, 'Directed'), {
+      dir: '.',
+    })
   })
 
   await test.step('The waste is empty.', () => {
@@ -38,7 +42,9 @@ Deno.test('Deal', async (test) => {
     'Deal.',
     async (test) => {
       solitaireDeal(solitaire)
-      await assertSnapshot(test, solitaireToString(solitaire, 'Undirected'))
+      await assertSnapshot(test, solitaireToString(solitaire, 'Undirected'), {
+        dir: '.',
+      })
     },
   )
 
@@ -67,7 +73,7 @@ Deno.test('Deal', async (test) => {
     async (test) => {
       while (solitaire.stock.length > 0) {
         solitairePoint(solitaire, solitaire.stock.at(-1)!)
-        await assertSnapshot(test, solitaireToString(solitaire))
+        await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
       }
     },
   )
@@ -76,7 +82,9 @@ Deno.test('Deal', async (test) => {
     'Redeal.',
     async (test) => {
       solitaireDeal(solitaire)
-      await assertSnapshot(test, solitaireToString(solitaire, 'Undirected'))
+      await assertSnapshot(test, solitaireToString(solitaire, 'Undirected'), {
+        dir: '.',
+      })
     },
   )
 
@@ -85,7 +93,7 @@ Deno.test('Deal', async (test) => {
     async (test) => {
       while (solitaire.stock.length > 0) {
         solitairePoint(solitaire, solitaire.stock.at(-1)!)
-        await assertSnapshot(test, solitaireToString(solitaire))
+        await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
       }
     },
   )
@@ -98,7 +106,7 @@ Deno.test('Playthrough', async (test) => {
     async (test) => {
       solitaire = Solitaire(() => 1 - Number.EPSILON, 0, 3, 7)
       solitaireDeal(solitaire)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -107,7 +115,7 @@ Deno.test('Playthrough', async (test) => {
       `Reveal tableau pile ${index}.`,
       async (test) => {
         solitairePoint(solitaire, column.at(-1)!)
-        await assertSnapshot(test, solitaireToString(solitaire))
+        await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
       },
     )
   }
@@ -116,7 +124,7 @@ Deno.test('Playthrough', async (test) => {
     'Take the ten of spades from tableau 2, top.',
     async (test) => {
       solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -124,7 +132,7 @@ Deno.test('Playthrough', async (test) => {
     'Put onto the jack of hearts at tableau 5.',
     async (test) => {
       solitaireBuild(solitaire, { type: 'Tableau', x: 5 })
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -132,7 +140,7 @@ Deno.test('Playthrough', async (test) => {
     'Take the the jack of hearts at tableau 5, top.',
     async (test) => {
       solitairePoint(solitaire, solitaire.tableau[5]!.at(-2)!)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -140,7 +148,7 @@ Deno.test('Playthrough', async (test) => {
     'Put onto the queen of spades at tableau 1.',
     async (test) => {
       solitaireBuild(solitaire, { type: 'Tableau', x: 1 })
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -148,7 +156,7 @@ Deno.test('Playthrough', async (test) => {
     'Reveal tableau pile 2.',
     async (test) => {
       solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -156,7 +164,7 @@ Deno.test('Playthrough', async (test) => {
     'Reveal tableau pile 5.',
     async (test) => {
       solitairePoint(solitaire, solitaire.tableau[5]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -164,7 +172,7 @@ Deno.test('Playthrough', async (test) => {
     'Take the the nine of spades at tableau 2, top.',
     async (test) => {
       solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -172,7 +180,7 @@ Deno.test('Playthrough', async (test) => {
     'Put onto the ten of hearts at tableau 1.',
     async (test) => {
       solitaireBuild(solitaire, { type: 'Tableau', x: 5 })
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
 
@@ -180,7 +188,69 @@ Deno.test('Playthrough', async (test) => {
     'Reveal tableau pile 2.',
     async (test) => {
       solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire))
+      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
     },
   )
+})
+
+Deno.test('Shuffle: permutations.', () => {
+  const iterations = 1_000_000
+  const array = ['a', 'b', 'c', 'd', 'e']
+  const permutations = permute(array).map((permutation) => permutation.join(''))
+
+  const distribution: Record<string, number> = {}
+  for (let i = 0; i < iterations; i++) {
+    shuffle(array, Math.random)
+    const permutation = array.join('')
+    distribution[permutation] ??= 0
+    distribution[permutation]++
+  }
+
+  for (const permutation of permutations) {
+    const occurrences = distribution[permutation] ?? 0
+    const frequency = occurrences / iterations
+    assertAlmostEquals(frequency, 1 / permutations.length, 0.001)
+  }
+})
+
+Deno.test('Shuffle: no randomization.', () => {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+  const letters = [...alphabet]
+  shuffle(letters, () => 1 - Number.EPSILON)
+  assertEquals(letters.join(''), alphabet)
+})
+
+/** [Heap's_algorithm](https://en.wikipedia.org/wiki/Heap%27s_algorithm). */
+function permute<T>(array: T[], n: number = array.length): T[][] {
+  if (n === 1) return [[...array]]
+
+  const permutations = []
+  permutations.push(...permute(array, n - 1))
+
+  for (let i = 0; i < n - 1; i++) {
+    if (n % 2) swapIndices(array, 0, n - 1)
+    else swapIndices(array, i, n - 1)
+    permutations.push(...permute(array, n - 1))
+  }
+
+  return permutations
+}
+
+Deno.test('Str', async (test) => {
+  for (
+    const [str, uncapitalized] of [
+      ['', ''],
+      [' ', ' '],
+      ['\t', '\t'],
+      ['\n', '\n'],
+      ['   ', '   '],
+      ['a', 'a'],
+      ['A', 'a'],
+      ['abc', 'abc'],
+      ['ABC', 'aBC'],
+    ] as const
+  ) {
+    await test.step(`strUncapitalize(${str}) => ${uncapitalized}`, () =>
+      assertEquals(uncapitalize(str), uncapitalized))
+  }
 })

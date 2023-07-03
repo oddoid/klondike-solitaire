@@ -1,15 +1,17 @@
+import { assertEquals } from 'std/testing/asserts.ts'
 import {
   cardFromString,
   cardFromStringCode,
   cardIsDirected,
   cardToString,
-  newDeck,
+} from '../card/card.ts'
+import { newDeck } from '../utils/card-pile.ts'
+import {
   Tableau,
   tableauBuild,
   tableauDeal,
   tableauIsBuildable,
-} from '@/solitaire'
-import { assertEquals } from 'std/testing/asserts.ts'
+} from './tableau.ts'
 
 Deno.test('tableau', () => {
   const stock = newDeck()

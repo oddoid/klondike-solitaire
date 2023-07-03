@@ -1,4 +1,4 @@
-import { Inverse } from '@/ooz'
+import { Inverse } from '../utils/inverse.ts'
 
 /**
  * Pip or face denomination. Number cards are usually represented with a

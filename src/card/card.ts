@@ -1,19 +1,20 @@
-import { assertNonNull, NonNull } from '@/ooz'
+import { CardDirection } from './card-direction.ts'
+import { CardSucceeds } from './card-succeeds.ts'
+import { CardVisibility } from './card-visibility.ts'
 import {
-  CardDirection,
-  CardSucceeds,
-  CardVisibility,
   Rank,
   RankASCII,
   rankFromPoint,
   rankToASCII,
   rankToPoint,
+} from './rank.ts'
+import {
   Suit,
   SuitASCII,
   suitFromOrder,
   suitToASCII,
   suitToOrder,
-} from '@/solitaire'
+} from './suit.ts'
 
 /**
  * See
@@ -28,7 +29,7 @@ const unicode = { rangeStart: 0x1f0a0, rankSize: 16, suitMax: 3 }
  * There is no scenario where a Card's rank or suit mutates so they are marked
  * readonly.
  */
-export interface Card {
+export type Card = {
   direction: CardDirection
   readonly rank: Rank
   readonly suit: Suit
@@ -67,13 +68,14 @@ export function cardFromStringCode(
   code: string,
   direction: CardDirection = 'Up',
 ): Card {
-  const point = NonNull(code.codePointAt(0), `No code point in ${code}.`)
+  const point = code.codePointAt(0)
+  if (point == null) throw Error(`no code point in ${code}`)
   const index = point - unicode.rangeStart
   const suit =
     suitFromOrder[unicode.suitMax - Math.trunc(index / unicode.rankSize)]
-  assertNonNull(suit, `No suit at code point ${point}.`)
+  if (suit == null) throw Error(`no suit at code point ${point}`)
   const rank = rankFromPoint[index % unicode.rankSize]
-  assertNonNull(rank, `No rank at code point ${point}.`)
+  if (rank == null) throw Error(`no rank at code point ${point}`)
   return { direction, rank, suit }
 }
 

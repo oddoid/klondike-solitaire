@@ -1,5 +1,5 @@
-import { Inverse } from '@/ooz'
-import { SuitColor } from '@/solitaire'
+import { Inverse } from '../utils/inverse.ts'
+import { SuitColor } from './suit-color.ts'
 
 /** Pip category. */
 export type Suit = Parameters<typeof SuitSet['has']>[0]

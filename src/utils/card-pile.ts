@@ -1,12 +1,9 @@
-import {
-  Card,
-  CardDirection,
-  cardToString,
-  CardVisibility,
-  ideographicSpace,
-  RankSet,
-  SuitSet,
-} from '@/solitaire'
+import { CardDirection } from '../card/card-direction.ts'
+import { CardVisibility } from '../card/card-visibility.ts'
+import { Card, cardToString } from '../card/card.ts'
+import { RankSet } from '../card/rank.ts'
+import { SuitSet } from '../card/suit.ts'
+import { ideographicSpace } from './unicode.ts'
 
 /** Generate a complete pack of 52 ordered cards. */
 export function newDeck(direction: CardDirection = 'Down'): Card[] {

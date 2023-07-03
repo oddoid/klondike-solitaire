@@ -1,8 +1,7 @@
-import { XY } from '@/ooz'
-import { Card } from '@/solitaire'
+import { Card } from '../card/card.ts'
 
-export interface CardsSelected {
-  readonly cards: Card[]
-  readonly pile: 'Foundation' | 'Tableau' | 'Waste'
-  readonly xy: XY
-}
+export type CardsSelected = Readonly<{
+  cards: Card[]
+  pile: 'Foundation' | 'Tableau' | 'Waste'
+  xy: { x: number; y: number }
+}>

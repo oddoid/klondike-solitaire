@@ -1,25 +1,25 @@
-import { NonNull, shuffle, uncapitalize, XY } from '@/ooz'
+import { CardVisibility } from './card/card-visibility.ts'
+import { Card, cardToString } from './card/card.ts'
+import { CardsSelected } from './layout/cards-selected.ts'
 import {
-  Card,
-  CardsSelected,
-  cardToString,
-  CardVisibility,
   Foundation,
   foundationBuild,
   foundationIsBuildable,
   foundationIsBuilt,
   foundationSelect,
   foundationToString,
-  newDeck,
+} from './layout/foundation.ts'
+import {
   Tableau,
   tableauBuild,
   tableauDeal,
   tableauIsBuildable,
   tableauSelect,
   tableauToString,
-} from '@/solitaire'
+} from './layout/tableau.ts'
+import { newDeck } from './utils/card-pile.ts'
 
-export interface Solitaire {
+export type Solitaire = {
   /**
    * The integral number of cards drawn from the stock into the waste at a
    * time. Equivalent to the reserve.
@@ -109,16 +109,17 @@ export function solitairePoint(
     self.selected = {
       cards: self.waste.splice(wasteY),
       pile: 'Waste',
-      xy: new XY(0, wasteY),
+      xy: { x: 0, y: wasteY },
     }
     return self.selected
   }
 
-  self.selected = NonNull(
-    foundationSelect(self.foundation, card) ??
-      tableauSelect(self.tableau, card),
-    `Missing card ${cardToString('Undirected', card)}.`,
-  )
+  const selected = foundationSelect(self.foundation, card) ??
+    tableauSelect(self.tableau, card)
+  if (selected == null) {
+    throw Error(`missing card ${cardToString('Undirected', card)}`)
+  }
+  self.selected = selected
   // Assign to selected as the above operation is a mutation that must be
   // completed or deselected.
   const { cards } = self.selected
@@ -152,10 +153,9 @@ export function solitaireIsBuildable(
       self.selected.cards,
     )
   }
-  return tableauIsBuildable(
-    NonNull(self.tableau[at.x]),
-    self.selected.cards,
-  )
+  const lane = self.tableau[at.x]
+  if (lane == null) throw Error(`missing lane at index ${at.x}`)
+  return tableauIsBuildable(lane, self.selected.cards)
 }
 
 export function solitaireIsWon(self: Readonly<Solitaire>): boolean {
@@ -185,7 +185,7 @@ export function solitaireToString(
   const selected = self.selected == null
     ? ''
     : (cardToString(visibility, ...self.selected.cards) +
-      ` from ${self.selected.pile} ${self.selected.xy.toString()}`)
+      ` from ${self.selected.pile} (${self.selected.xy.x}, ${self.selected.xy.y})`)
   return `
 ${foundations}
 ${tableau}
@@ -201,7 +201,11 @@ export function solitaireBuild(
   if (self.selected == null) return
   if (at.type === 'Foundation') {
     foundationBuild(self.foundation, self.selected.cards)
-  } else tableauBuild(NonNull(self.tableau[at.x]), self.selected.cards)
+  } else {
+    const lane = self.tableau[at.x]
+    if (lane == null) throw Error(`missing lane at index ${at.x}`)
+    tableauBuild(lane, self.selected.cards)
+  }
   if (self.selected.cards.length !== 0) return
   delete self.selected
 }
@@ -217,4 +221,35 @@ export function solitaireDeselect(self: Solitaire): void {
 
 function padCharEnd(str: string, width: number, char: string): string {
   return str + char.repeat(Math.max(0, width - str.length))
+}
+
+/**
+ * Shuffle items in place.
+ * https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+ * https://blog.codinghorror.com/the-danger-of-naivete/
+ * @internal
+ */
+export function shuffle(self: unknown[], random: () => number): void {
+  for (let i = self.length - 1; i >= 0; i--) {
+    swapIndices(self, i, Math.trunc(random() * (i + 1)))
+  }
+}
+
+/**
+ * Swap left and right values in place.
+ * @internal
+ */
+export function swapIndices(
+  self: unknown[],
+  left: number,
+  right: number,
+): void {
+  // deno-fmt-ignore
+  [self[left], self[right]] = [self[right], self[left]]
+}
+
+/** @internal */
+export function uncapitalize<const T extends string>(str: T): Uncapitalize<T> {
+  if (str[0] == null) return str as Uncapitalize<T>
+  return `${str[0].toLocaleLowerCase()}${str.slice(1)}` as Uncapitalize<T>
 }

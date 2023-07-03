@@ -1,12 +1,12 @@
+import { assertEquals } from 'std/testing/asserts.ts'
+import { cardFromString } from '../card/card.ts'
 import {
-  cardFromString,
   Foundation,
   foundationBuild,
   foundationIsBuildable,
   foundationIsBuilt,
   foundationIsPillarBuilt,
-} from '@/solitaire'
-import { assertEquals } from 'std/testing/asserts.ts'
+} from './foundation.ts'
 
 for (
   const [name, foundationStr, cardStr, expected] of [

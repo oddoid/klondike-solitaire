@@ -1,3 +1,5 @@
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
+import { newDeck } from '../utils/card-pile.ts'
 import {
   Card,
   cardFromString,
@@ -5,10 +7,8 @@ import {
   cardIsDirected,
   cardSucceeds,
   cardToString,
-  newDeck,
-  rankToOrder,
-} from '@/solitaire'
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
+} from './card.ts'
+import { rankToOrder } from './rank.ts'
 
 for (
   const [name, cards, down, up] of [

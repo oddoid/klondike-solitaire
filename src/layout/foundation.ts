@@ -1,14 +1,10 @@
-import { XY } from '@/ooz'
-import {
-  Card,
-  CardsSelected,
-  CardSucceeds,
-  cardSucceeds,
-  CardVisibility,
-  pileToString,
-  rankToOrder,
-  Suit,
-} from '@/solitaire'
+import { CardSucceeds } from '../card/card-succeeds.ts'
+import { CardVisibility } from '../card/card-visibility.ts'
+import { Card, cardSucceeds } from '../card/card.ts'
+import { rankToOrder } from '../card/rank.ts'
+import { Suit } from '../card/suit.ts'
+import { pileToString } from '../utils/card-pile.ts'
+import { CardsSelected } from './cards-selected.ts'
 
 /**
  * One foundation pillar per suit. The number of pillars are fixed and distinct.
@@ -85,7 +81,7 @@ export function foundationSelect(
     return {
       cards: foundation.splice(y),
       pile: 'Foundation',
-      xy: new XY(index, y),
+      xy: { x: index, y },
     }
   }
 }

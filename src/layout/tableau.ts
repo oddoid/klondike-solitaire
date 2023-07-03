@@ -1,14 +1,10 @@
-import { assert, XY } from '@/ooz'
-import {
-  Card,
-  CardsSelected,
-  CardSucceeds,
-  cardSucceeds,
-  CardVisibility,
-  pileToString,
-  rankToOrder,
-  suitToColor,
-} from '@/solitaire'
+import { CardSucceeds } from '../card/card-succeeds.ts'
+import { CardVisibility } from '../card/card-visibility.ts'
+import { Card, cardSucceeds } from '../card/card.ts'
+import { rankToOrder } from '../card/rank.ts'
+import { suitToColor } from '../card/suit.ts'
+import { pileToString } from '../utils/card-pile.ts'
+import { CardsSelected } from './cards-selected.ts'
 
 /**
  * The playing field consists of a tableau of lanes that can be maneuvered to
@@ -30,7 +26,9 @@ export type Tableau = readonly Card[][]
  * used is the lesser of `lanes * (lanes + 1) / 2` and `stock.length`.
  */
 export function Tableau(lanes: number): Tableau {
-  assert(lanes > 0, `Tableau size must be greater than zero but was ${lanes}.`)
+  if (lanes <= 0) {
+    throw Error(`tableau size must be greater than zero but was ${lanes}`)
+  }
   const tableau = []
   for (let i = 0; i < lanes; i++) tableau.push([])
   return tableau
@@ -55,7 +53,7 @@ const succeeds: CardSucceeds = (lhs, rhs) => {
 
 export function tableauDeal(self: Tableau, stock: Card[]): void {
   for (const [index, lane] of self.entries()) {
-    assert(lane.length === 0, 'Tableau must be reset before dealt.')
+    if (lane.length !== 0) throw Error('tableau must be reset before dealt')
     const cards = stock.splice(-index - 1)
     for (const card of cards) card.direction = 'Down'
     lane.push(...cards)
@@ -86,7 +84,7 @@ export function tableauSelect(
   for (const [x, lane] of self.entries()) {
     const y = lane.indexOf(card)
     if (y === -1) continue
-    return { cards: lane.splice(y), pile: 'Tableau', xy: new XY(x, y) }
+    return { cards: lane.splice(y), pile: 'Tableau', xy: { x, y } }
   }
 }
 

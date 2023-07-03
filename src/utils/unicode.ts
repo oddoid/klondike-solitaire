@@ -1,5 +1,3 @@
-import { assert } from '@/ooz'
-
 export const ideographicSpace = '　'
 
 export function fractionOfIntsChar(
@@ -13,10 +11,9 @@ export function fractionOfIntsChar(
 
 function intToSubscript(val: number): string {
   const subscriptsStart = '₀'.codePointAt(0)
-  assert(subscriptsStart != null)
   let str = ''
   for (const digit of genIntDigits(val)) {
-    str = `${String.fromCodePoint(subscriptsStart + digit)}${str}`
+    str = `${String.fromCodePoint(subscriptsStart! + digit)}${str}`
   }
   return str
 }

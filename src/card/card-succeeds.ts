@@ -1,4 +1,4 @@
-import { Card } from '@/solitaire'
+import { Card } from './card.ts'
 
 /**
  * Returns true if right card directly succeeds left.
