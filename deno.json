@@ -2,8 +2,7 @@
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true,
-    "useUnknownInCatchVariables": true
+    "noUncheckedIndexedAccess": true
   },
   "fmt": { "semiColons": false, "singleQuote": true },
   "imports": { "std/": "https://deno.land/std@0.192.0/" },
