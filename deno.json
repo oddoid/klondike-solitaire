@@ -2,10 +2,13 @@
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "fmt": { "semiColons": false, "singleQuote": true },
   "imports": { "std/": "https://deno.land/std@0.192.0/" },
+  "lint": { "rules": { "exclude": ["no-inferrable-types"] } },
   "lock": false,
   "name": "solitaire",
   "tasks": {
