@@ -1,110 +1,95 @@
-import { assertEquals } from 'std/testing/asserts.ts'
+import {expect, test} from 'vitest'
 import {
   cardFromString,
   cardFromStringCode,
   cardIsDirected,
-  cardToString,
-} from '../card/card.ts'
-import { newDeck } from '../utils/card-pile.ts'
+  cardToString
+} from '../card/card.js'
+import {newDeck} from '../utils/card-pile.js'
 import {
   Tableau,
   tableauBuild,
   tableauDeal,
-  tableauIsBuildable,
-} from './tableau.ts'
+  tableauIsBuildable
+} from './tableau.js'
 
-Deno.test('tableau', () => {
+test('tableau', () => {
   const stock = newDeck()
   const tableau = Tableau(7)
   tableauDeal(tableau, stock)
-  assertEquals(
-    cardToString('Undirected', ...stock),
-    '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞' + '🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋',
+  expect(cardToString('Undirected', ...stock)).toBe(
+    '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞' + '🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋'
   )
-  assertEquals(tableau.map((pile) => cardToString('Undirected', ...pile)), [
-    '🂮',
-    '🂫🂭',
-    '🂨🂩🂪',
-    '🂤🂥🂦🂧',
-    '🂽🂾🂡🂢🂣',
-    '🂶🂷🂸🂹🂺🂻',
-    '🃍🃎🂱🂲🂳🂴🂵',
-  ])
-  assertEquals(
-    tableau.every((pile) => cardIsDirected('Down', ...pile)),
-    true,
-  )
+  expect(
+    tableau.map(pile => cardToString('Undirected', ...pile))
+  ).toStrictEqual(['🂮', '🂫🂭', '🂨🂩🂪', '🂤🂥🂦🂧', '🂽🂾🂡🂢🂣', '🂶🂷🂸🂹🂺🂻', '🃍🃎🂱🂲🂳🂴🂵'])
+  expect(tableau.every(pile => cardIsDirected('Down', ...pile))).toBe(true)
 })
 
-Deno.test('Tableau from insufficient stock.', () => {
+test('Tableau from insufficient stock.', () => {
   const stock = cardFromString('🂺🂻🂽🂾🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮')
   const tableau = Tableau(7)
   tableauDeal(tableau, stock)
-  assertEquals(stock, [])
-  assertEquals(tableau.map((pile) => cardToString('Directed', ...pile)), [
+  expect(stock).toStrictEqual([])
+  expect(tableau.map(pile => cardToString('Directed', ...pile))).toStrictEqual([
     '🂠',
     '🂠🂠',
     '🂠🂠🂠',
     '🂠🂠🂠🂠',
     '🂠🂠🂠🂠🂠',
     '🂠🂠',
-    '',
+    ''
   ])
 })
 
-for (
-  const [name, pileStr, cardStr, expected] of [
-    ['empty', '', '🃞', '🃞'],
-    ['nonempty', '🃚', '🃉', '🃚🃉'],
-    ['almost built', '🃞🃍🃛🃊🃙🃈🃗🃆🃕🃄🃓🃂', '🃑', '🃞🃍🃛🃊🃙🃈🃗🃆🃕🃄🃓🃂🃑'],
-  ] as const
-) {
-  Deno.test(`build buildable ${name}`, () => {
+for (const [name, pileStr, cardStr, expected] of <const>[
+  ['empty', '', '🃞', '🃞'],
+  ['nonempty', '🃚', '🃉', '🃚🃉'],
+  ['almost built', '🃞🃍🃛🃊🃙🃈🃗🃆🃕🃄🃓🃂', '🃑', '🃞🃍🃛🃊🃙🃈🃗🃆🃕🃄🃓🃂🃑']
+]) {
+  test(`build buildable ${name}`, () => {
     const pile = cardFromString(pileStr, 'Down')
     if (pile.length > 0) pile.at(-1)!.direction = 'Up'
     const cards = cardFromString(cardStr)
-    assertEquals(tableauIsBuildable(pile, cards), true)
+    expect(tableauIsBuildable(pile, cards)).toBe(true)
     tableauBuild(pile, cards)
-    assertEquals(
-      pile,
+    expect(pile).toStrictEqual(
       [...expected].map((card, i, array) =>
         cardFromStringCode(card, i >= array.length - 2 ? 'Up' : 'Down')
-      ),
+      )
     )
   })
 }
 
-for (
-  const [name, pileStr, cardStr] of [
-    ['empty and non-king', '', '🃒'],
-    ['nonempty and matching suit', '🃒', '🃑'],
-    ['nonempty and matching color', '🃒', '🂡'],
-    ['nonempty and non-sequential rank', '🃓', '🃁'],
-    ['built', '🃞🃍🃛🃊🃙🃈🃗🃆🃕🃄🃓🃂🃑', '🃑'],
-  ] as const
-) {
-  Deno.test(`build non-buildable ${name}`, () => {
+for (const [name, pileStr, cardStr] of <const>[
+  ['empty and non-king', '', '🃒'],
+  ['nonempty and matching suit', '🃒', '🃑'],
+  ['nonempty and matching color', '🃒', '🂡'],
+  ['nonempty and non-sequential rank', '🃓', '🃁'],
+  ['built', '🃞🃍🃛🃊🃙🃈🃗🃆🃕🃄🃓🃂🃑', '🃑']
+]) {
+  test(`build non-buildable ${name}`, () => {
     const pile = cardFromString(pileStr, 'Down')
     if (pile.length > 0) pile.at(-1)!.direction = 'Up'
     const cards = cardFromString(cardStr)
-    assertEquals(tableauIsBuildable(pile, cards), false)
+    expect(tableauIsBuildable(pile, cards)).toBe(false)
     tableauBuild(pile, cards)
-    assertEquals(cards.length, 1)
+    expect(cards.length).toBe(1)
   })
 }
 
-Deno.test('build card Down', () => {
+test('build card Down', () => {
   const pile = cardFromString('🃞🃍🃛')
   const cards = cardFromString('🃊', 'Down')
-  assertEquals(tableauIsBuildable(pile, cards), false)
+  expect(tableauIsBuildable(pile, cards)).toBe(false)
   tableauBuild(pile, cards)
-  assertEquals(cards.length, 1)
+  expect(cards.length).toBe(1)
 })
 
-Deno.test('build pile Down', () => {
+test('build pile Down', () => {
   const pile = cardFromString('🃞🃍🃛', 'Down')
   const cards = cardFromString('🃊')
-  assertEquals(tableauIsBuildable(pile, cards), false)
+  expect(tableauIsBuildable(pile, cards)).toBe(false)
   tableauBuild(pile, cards)
-  assertEquals(cards.length, 1)
+  expect(cards.length).toBe(1)
 })

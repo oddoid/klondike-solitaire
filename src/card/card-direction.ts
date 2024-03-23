@@ -4,6 +4,6 @@
  * card has a unique suit-rank identity that is secret when hidden (down) and
  * known when visible (up).
  */
-export type CardDirection = Parameters<typeof CardDirectionSet['has']>[0]
+export type CardDirection = Parameters<(typeof CardDirectionSet)['has']>[0]
 
-export const CardDirectionSet = new Set(['Down', 'Up'] as const)
+export const CardDirectionSet = new Set(<const>['Down', 'Up'])

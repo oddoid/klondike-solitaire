@@ -1,10 +1,10 @@
-import { CardSucceeds } from '../card/card-succeeds.ts'
-import { CardVisibility } from '../card/card-visibility.ts'
-import { Card, cardSucceeds } from '../card/card.ts'
-import { rankToOrder } from '../card/rank.ts'
-import { Suit } from '../card/suit.ts'
-import { pileToString } from '../utils/card-pile.ts'
-import { CardsSelected } from './cards-selected.ts'
+import type {CardSucceeds} from '../card/card-succeeds.js'
+import type {CardVisibility} from '../card/card-visibility.js'
+import {Card, cardSucceeds} from '../card/card.js'
+import {rankToOrder} from '../card/rank.js'
+import type {Suit} from '../card/suit.js'
+import {pileToString} from '../utils/card-pile.js'
+import type {CardsSelected} from './cards-selected.js'
 
 /**
  * One foundation pillar per suit. The number of pillars are fixed and distinct.
@@ -17,7 +17,7 @@ export type Foundation = readonly [
   Clubs: Card[],
   Diamonds: Card[],
   Hearts: Card[],
-  Spades: Card[],
+  Spades: Card[]
 ]
 
 /** Create a set of ordered foundation piles. */
@@ -37,15 +37,15 @@ const succeeds: CardSucceeds = (lhs, rhs) => {
   if (rhs == null) return lhs != null
   if (lhs == null) return rhs.rank === 'Ace'
   if (lhs.suit !== rhs.suit) return false
-  return (rankToOrder[lhs.rank] + 1) === rankToOrder[rhs.rank]
+  return rankToOrder[lhs.rank] + 1 === rankToOrder[rhs.rank]
 }
 
-const suitToIndex = {
+const suitToIndex = (<const>{
   Clubs: 0,
   Diamonds: 1,
   Hearts: 2,
-  Spades: 3,
-} as const satisfies Record<Suit, number>
+  Spades: 3
+}) satisfies {[suit in Suit]: number}
 
 /**
  * Add a card to a foundation pillar. Invoke `isBuildable()` first to verify
@@ -64,7 +64,7 @@ export function foundationGetPillar(self: Foundation, suit: Suit): Card[] {
 /** Test whether a pile's top card can be built on foundation pillar. */
 export function foundationIsBuildable(
   self: Foundation,
-  cards: readonly Readonly<Card>[],
+  cards: readonly Readonly<Card>[]
 ): boolean {
   const card = cards[0]
   if (card == null || !cardSucceeds(succeeds, ...cards)) return false
@@ -73,7 +73,7 @@ export function foundationIsBuildable(
 
 export function foundationSelect(
   self: Readonly<Foundation>,
-  card: Readonly<Card>,
+  card: Readonly<Card>
 ): CardsSelected | undefined {
   for (const [index, foundation] of self.entries()) {
     const y = foundation.indexOf(card)
@@ -81,7 +81,7 @@ export function foundationSelect(
     return {
       cards: foundation.splice(y),
       pile: 'Foundation',
-      xy: { x: index, y },
+      xy: {x: index, y}
     }
   }
 }
@@ -95,12 +95,12 @@ export function foundationIsBuilt(self: Readonly<Foundation>): boolean {
 export function foundationIsPillarBuilt(
   ...pillars: readonly (readonly Readonly<Card>[])[]
 ): boolean {
-  return pillars.every((pillar) => pillar.at(-1)?.rank === 'King')
+  return pillars.every(pillar => pillar.at(-1)?.rank === 'King')
 }
 
 export function foundationToString(
   self: Readonly<Foundation>,
-  visibility: CardVisibility = 'Directed',
+  visibility: CardVisibility = 'Directed'
 ): string {
   return pileToString(Object.values(self), visibility)
 }

@@ -1,27 +1,27 @@
-import { CardDirection } from './card-direction.ts'
-import { CardSucceeds } from './card-succeeds.ts'
-import { CardVisibility } from './card-visibility.ts'
+import type {CardDirection} from './card-direction.js'
+import type {CardSucceeds} from './card-succeeds.js'
+import type {CardVisibility} from './card-visibility.js'
 import {
-  Rank,
-  RankASCII,
   rankFromPoint,
   rankToASCII,
   rankToPoint,
-} from './rank.ts'
+  type Rank,
+  type RankASCII
+} from './rank.js'
 import {
-  Suit,
-  SuitASCII,
   suitFromOrder,
   suitToASCII,
   suitToOrder,
-} from './suit.ts'
+  type Suit,
+  type SuitASCII
+} from './suit.js'
 
 /**
  * See
  * [Playing Cards Unicode block](https://en.wikipedia.org/wiki/Playing_cards_in_Unicode).
  * Suits are ordered reverse-alphabetically in Unicode.
  */
-const unicode = { rangeStart: 0x1f0a0, rankSize: 16, suitMax: 3 }
+const unicode = {rangeStart: 0x1f0a0, rankSize: 16, suitMax: 3}
 
 /**
  * A playing card.
@@ -42,7 +42,7 @@ export type CardASCII = `${SuitASCII}${RankASCII}`
 
 /** Returns a new card. */
 export function Card(direction: CardDirection, rank: Rank, suit: Suit): Card {
-  return { direction, rank, suit }
+  return {direction, rank, suit}
 }
 
 /** Tests direction of all cards. */
@@ -50,7 +50,7 @@ export function cardIsDirected(
   direction: CardDirection,
   ...cards: readonly Readonly<Card>[]
 ): boolean {
-  return cards.every((card) => card.direction === direction)
+  return cards.every(card => card.direction === direction)
 }
 
 /**
@@ -58,15 +58,15 @@ export function cardIsDirected(
  */
 export function cardFromString(
   str: string,
-  direction: CardDirection = 'Up',
+  direction: CardDirection = 'Up'
 ): Card[] {
-  return [...str].map((code) => cardFromStringCode(code, direction))
+  return [...str].map(code => cardFromStringCode(code, direction))
 }
 
 /** Unicode to Card adapter. Only face-up codes are supported. */
 export function cardFromStringCode(
   code: string,
-  direction: CardDirection = 'Up',
+  direction: CardDirection = 'Up'
 ): Card {
   const point = code.codePointAt(0)
   if (point == null) throw Error(`no code point in ${code}`)
@@ -76,7 +76,7 @@ export function cardFromStringCode(
   if (suit == null) throw Error(`no suit at code point ${point}`)
   const rank = rankFromPoint[index % unicode.rankSize]
   if (rank == null) throw Error(`no rank at code point ${point}`)
-  return { direction, rank, suit }
+  return {direction, rank, suit}
 }
 
 /** True if pile succeeds. */
@@ -85,7 +85,7 @@ export function cardSucceeds(
   ...cards: readonly Readonly<Card>[]
 ): boolean {
   if (cards.length === 0) return succeeds(undefined, undefined)
-  for (let index = 0; index <= (cards.length - 1); index++) {
+  for (let index = 0; index <= cards.length - 1; index++) {
     if (!succeeds(cards[index], cards[index + 1])) return false
   }
   return true
@@ -107,10 +107,11 @@ export function cardToString(
 
 function _cardToString(
   visibility: CardVisibility,
-  card: Readonly<Card>,
+  card: Readonly<Card>
 ): string {
   if (visibility === 'Directed' && card.direction === 'Down') return '🂠'
-  const point = unicode.rangeStart +
+  const point =
+    unicode.rangeStart +
     (unicode.suitMax - suitToOrder[card.suit]) * unicode.rankSize +
     rankToPoint[card.rank]
   return String.fromCodePoint(point)

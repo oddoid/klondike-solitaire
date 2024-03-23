@@ -1,23 +1,23 @@
-import { CardVisibility } from './card/card-visibility.ts'
-import { Card, cardToString } from './card/card.ts'
-import { CardsSelected } from './layout/cards-selected.ts'
+import type {CardVisibility} from './card/card-visibility.js'
+import {Card, cardToString} from './card/card.js'
+import type {CardsSelected} from './layout/cards-selected.js'
 import {
   Foundation,
   foundationBuild,
   foundationIsBuildable,
   foundationIsBuilt,
   foundationSelect,
-  foundationToString,
-} from './layout/foundation.ts'
+  foundationToString
+} from './layout/foundation.js'
 import {
   Tableau,
   tableauBuild,
   tableauDeal,
   tableauIsBuildable,
   tableauSelect,
-  tableauToString,
-} from './layout/tableau.ts'
-import { newDeck } from './utils/card-pile.ts'
+  tableauToString
+} from './layout/tableau.js'
+import {newDeck} from './utils/card-pile.js'
 
 export type Solitaire = {
   /**
@@ -50,7 +50,7 @@ export function Solitaire(
   random?: () => number,
   wins?: number,
   drawSize?: number,
-  tableauSize?: number,
+  tableauSize?: number
 ): Solitaire {
   drawSize ??= 3
   random ??= Math.random
@@ -65,7 +65,7 @@ export function Solitaire(
     waste: [],
     random,
     tableauSize,
-    wins: wins ?? 0,
+    wins: wins ?? 0
   }
   tableauDeal(self.tableau, stock)
   return self
@@ -90,7 +90,7 @@ export function solitaireReset(self: Solitaire): void {
  */
 export function solitairePoint(
   self: Solitaire,
-  card: Card,
+  card: Card
 ): CardsSelected | undefined {
   solitaireDeselect(self)
 
@@ -109,20 +109,20 @@ export function solitairePoint(
     self.selected = {
       cards: self.waste.splice(wasteY),
       pile: 'Waste',
-      xy: { x: 0, y: wasteY },
+      xy: {x: 0, y: wasteY}
     }
     return self.selected
   }
 
-  const selected = foundationSelect(self.foundation, card) ??
-    tableauSelect(self.tableau, card)
+  const selected =
+    foundationSelect(self.foundation, card) ?? tableauSelect(self.tableau, card)
   if (selected == null) {
     throw Error(`missing card ${cardToString('Undirected', card)}`)
   }
   self.selected = selected
   // Assign to selected as the above operation is a mutation that must be
   // completed or deselected.
-  const { cards } = self.selected
+  const {cards} = self.selected
   if (cards.length === 1 && cards[0]?.direction === 'Down') {
     cards[0].direction = 'Up'
     solitaireDeselect(self)
@@ -144,14 +144,11 @@ export function solitaireDeal(self: Solitaire): void {
 
 export function solitaireIsBuildable(
   self: Readonly<Solitaire>,
-  at: { type: 'Foundation' } | { type: 'Tableau'; x: number },
+  at: {type: 'Foundation'} | {type: 'Tableau'; x: number}
 ): boolean {
   if (self.selected == null) return false
   if (at.type === 'Foundation') {
-    return foundationIsBuildable(
-      self.foundation,
-      self.selected.cards,
-    )
+    return foundationIsBuildable(self.foundation, self.selected.cards)
   }
   const lane = self.tableau[at.x]
   if (lane == null) throw Error(`missing lane at index ${at.x}`)
@@ -164,7 +161,7 @@ export function solitaireIsWon(self: Readonly<Solitaire>): boolean {
 
 export function solitaireToString(
   self: Readonly<Solitaire>,
-  visibility: CardVisibility = 'Directed',
+  visibility: CardVisibility = 'Directed'
 ): string {
   const foundations = foundationToString(self.foundation, visibility)
   const tableau = tableauToString(self.tableau, visibility)
@@ -172,7 +169,7 @@ export function solitaireToString(
   const reserve = padCharEnd(
     cardToString('Directed', ...self.waste.slice(-self.drawSize)),
     1,
-    '🃟',
+    '🃟'
   )
   const unreservedWaste = self.waste.slice(0, -self.drawSize)
   const waste = padCharEnd(
@@ -180,12 +177,13 @@ export function solitaireToString(
       ? '🂠'.repeat(unreservedWaste.length)
       : cardToString(visibility, ...unreservedWaste),
     1,
-    '🃟',
+    '🃟'
   )
-  const selected = self.selected == null
-    ? ''
-    : (cardToString(visibility, ...self.selected.cards) +
-      ` from ${self.selected.pile} (${self.selected.xy.x}, ${self.selected.xy.y})`)
+  const selected =
+    self.selected == null
+      ? ''
+      : cardToString(visibility, ...self.selected.cards) +
+        ` from ${self.selected.pile} (${self.selected.xy.x}, ${self.selected.xy.y})`
   return `
 ${foundations}
 ${tableau}
@@ -196,7 +194,7 @@ ${selected}
 
 export function solitaireBuild(
   self: Solitaire,
-  at: { type: 'Foundation' } | { type: 'Tableau'; x: number },
+  at: {type: 'Foundation'} | {type: 'Tableau'; x: number}
 ): void {
   if (self.selected == null) return
   if (at.type === 'Foundation') {
@@ -212,9 +210,10 @@ export function solitaireBuild(
 
 export function solitaireDeselect(self: Solitaire): void {
   if (self.selected == null) return
-  const pile = self.selected.pile === 'Waste'
-    ? self.waste
-    : self[uncapitalize(self.selected.pile)][self.selected.xy.x]!
+  const pile =
+    self.selected.pile === 'Waste'
+      ? self.waste
+      : self[uncapitalize(self.selected.pile)][self.selected.xy.x]!
   pile.push(...self.selected.cards)
   delete self.selected
 }
@@ -242,14 +241,13 @@ export function shuffle(self: unknown[], random: () => number): void {
 export function swapIndices(
   self: unknown[],
   left: number,
-  right: number,
+  right: number
 ): void {
-  // deno-fmt-ignore
-  [self[left], self[right]] = [self[right], self[left]]
+  ;[self[left], self[right]] = [self[right], self[left]]
 }
 
 /** @internal */
 export function uncapitalize<const T extends string>(str: T): Uncapitalize<T> {
-  if (str[0] == null) return str as Uncapitalize<T>
-  return `${str[0].toLocaleLowerCase()}${str.slice(1)}` as Uncapitalize<T>
+  if (str[0] == null) return <Uncapitalize<T>>str
+  return <Uncapitalize<T>>`${str[0].toLocaleLowerCase()}${str.slice(1)}`
 }

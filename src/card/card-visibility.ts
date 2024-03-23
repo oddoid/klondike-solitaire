@@ -4,5 +4,5 @@
  * regardless of card directions. For example, a face down ace of spades is
  * `'🂠'` when `'directed'` and `'🂡'` when `'undirected'`.
  */
-export type CardVisibility = Parameters<typeof CardVisibilitySet['has']>[0]
-export const CardVisibilitySet = new Set(['Directed', 'Undirected'] as const)
+export type CardVisibility = Parameters<(typeof CardVisibilitySet)['has']>[0]
+export const CardVisibilitySet = new Set(<const>['Directed', 'Undirected'])

@@ -1,96 +1,87 @@
-import { assertEquals } from 'std/testing/asserts.ts'
-import { cardFromString } from '../card/card.ts'
+import {expect, test} from 'vitest'
+import {cardFromString} from '../card/card.js'
 import {
   Foundation,
   foundationBuild,
   foundationIsBuildable,
   foundationIsBuilt,
-  foundationIsPillarBuilt,
-} from './foundation.ts'
+  foundationIsPillarBuilt
+} from './foundation.js'
 
-for (
-  const [name, foundationStr, cardStr, expected] of [
-    ['empty and ace', '', '🃑', '🃑'],
-    ['nonempty', '🃑', '🃒', '🃑🃒'],
-    ['almost built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', '🃞', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞'],
-  ] as const
-) {
-  Deno.test(`Build buildable: ${name}.`, () => {
+for (const [name, foundationStr, cardStr, expected] of <const>[
+  ['empty and ace', '', '🃑', '🃑'],
+  ['nonempty', '🃑', '🃒', '🃑🃒'],
+  ['almost built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', '🃞', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞']
+]) {
+  test(`Build buildable: ${name}.`, () => {
     const foundation = Foundation()
     foundation[0].push(...cardFromString(foundationStr))
     const cards = cardFromString(cardStr)
-    assertEquals(foundationIsBuildable(foundation, cards), true)
+    expect(foundationIsBuildable(foundation, cards)).toBe(true)
     foundationBuild(foundation, cards)
-    assertEquals(cards.length, 0)
-    assertEquals(foundation, [cardFromString(expected), [], [], []])
+    expect(cards.length).toBe(0)
+    expect(foundation).toStrictEqual([cardFromString(expected), [], [], []])
   })
 }
 
-for (
-  const [name, foundationStr, cardStr] of [
-    ['empty and non-ace', '', '🃒'],
-    ['nonempty and non-matching suit', '🃑', '🂢'],
-    ['nonempty and non-sequential rank', '🃑', '🃓'],
-    ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑'],
-  ] as const
-) {
-  Deno.test(`Forbid building: ${name}.`, () => {
+for (const [name, foundationStr, cardStr] of <const>[
+  ['empty and non-ace', '', '🃒'],
+  ['nonempty and non-matching suit', '🃑', '🂢'],
+  ['nonempty and non-sequential rank', '🃑', '🃓'],
+  ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', '🃑']
+]) {
+  test(`Forbid building: ${name}.`, () => {
     const foundation = Foundation()
     foundation[0].push(...cardFromString(foundationStr))
     const cards = cardFromString(cardStr)
-    assertEquals(foundationIsBuildable(foundation, cards), false)
+    expect(foundationIsBuildable(foundation, cards)).toBe(false)
     foundationBuild(foundation, cards)
-    assertEquals(cards.length, 1)
+    expect(cards.length).toBe(1)
   })
 }
 
-Deno.test('Build card down.', () => {
+test('Build card down.', () => {
   const foundation = Foundation()
   foundation[0].push(...cardFromString('🃑🃒🃓'))
   const cards = cardFromString('🃔', 'Down')
-  assertEquals(foundationIsBuildable(foundation, cards), false)
+  expect(foundationIsBuildable(foundation, cards)).toBe(false)
   foundationBuild(foundation, cards)
-  assertEquals(cards.length, 1)
+  expect(cards.length).toBe(1)
 })
 
-for (
-  const [name, foundation, built] of [
-    ['empty', Foundation(), false],
-    ['partly', {
+for (const [name, foundation, built] of <const>[
+  ['empty', Foundation(), false],
+  [
+    'partly',
+    {
       Clubs: cardFromString('🃑'),
       Diamonds: cardFromString('🃁'),
       Hearts: cardFromString('🂱'),
-      Spades: cardFromString('🂡'),
-    }, false],
-    [
-      'built',
-      {
-        Clubs: cardFromString('🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞'),
-        Diamonds: cardFromString('🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋🃍🃎'),
-        Hearts: cardFromString('🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂽🂾'),
-        Spades: cardFromString('🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮'),
-      },
-      true,
-    ],
-  ] as const
-) {
-  Deno.test(
-    `Is built: ${name}.`,
-    () => assertEquals(foundationIsBuilt(<Foundation> foundation), built),
-  )
+      Spades: cardFromString('🂡')
+    },
+    false
+  ],
+  [
+    'built',
+    {
+      Clubs: cardFromString('🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞'),
+      Diamonds: cardFromString('🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋🃍🃎'),
+      Hearts: cardFromString('🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂽🂾'),
+      Spades: cardFromString('🂡🂢🂣🂤🂥🂦🂧🂨🂩🂪🂫🂭🂮')
+    },
+    true
+  ]
+]) {
+  test(`Is built: ${name}.`, () =>
+    expect(foundationIsBuilt(<Foundation>foundation)).toBe(built))
 }
 
-for (
-  const [name, foundationStr, built] of [
-    ['empty', '', false],
-    ['singular', '🃑', false],
-    ['not built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', false],
-    ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true],
-  ] as const
-) {
-  Deno.test(`Is pillar built: ${name}.`, () =>
-    assertEquals(
-      foundationIsPillarBuilt(cardFromString(foundationStr)),
-      built,
-    ))
+for (const [name, foundationStr, built] of <const>[
+  ['empty', '', false],
+  ['singular', '🃑', false],
+  ['not built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝', false],
+  ['built', '🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞', true]
+]) {
+  test(`Is pillar built: ${name}.`, () =>
+    expect(foundationIsPillarBuilt(cardFromString(foundationStr))).toBe(built))
 }

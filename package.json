@@ -1,0 +1,55 @@
+{
+  "author": "Stephen Niedzielski <stephen@oidoid.com> (https://oidoid.com)",
+  "bugs": "https://github.com/oidoid/klondike-solitaire/issues",
+  "description": "🂮 Klondike Solitaire game logic library.",
+  "devDependencies": {
+    "prettier": "3.2.5",
+    "typescript": "5.4.3",
+    "vitest": "1.4.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist",
+    "!dist/**/tsconfig.tsbuildinfo"
+  ],
+  "homepage": "https://github.com/oidoid/klondike-solitaire",
+  "keywords": [
+    "klondike",
+    "solitaire",
+    "patience",
+    "canfield",
+    "game"
+  ],
+  "license": "AGPL-3.0-only",
+  "name": "klondike-solitaire",
+  "prettier": {
+    "arrowParens": "avoid",
+    "bracketSpacing": false,
+    "jsxSingleQuote": true,
+    "proseWrap": "always",
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oidoid/klondike-solitaire.git"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf dist",
+    "format": "npm run formatter -- --write",
+    "formatter": "prettier --cache --log-level warn './**/*.{json,md,ts,yaml}'",
+    "preversion": "[ -z \"$(git status -z)\" ]",
+    "prepublishOnly": "! git symbolic-ref --quiet HEAD || git push --follow-tags origin \"$(git branch --show-current)\"",
+    "test": "npm run test:format && npm run test:unit && npm run build",
+    "test:format": "npm run formatter -- --check",
+    "test:unit": "vitest run",
+    "version": "npm test"
+  },
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "version": "0.0.9"
+}

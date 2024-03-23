@@ -1,14 +1,12 @@
-import { Inverse } from '../utils/inverse.ts'
-import { SuitColor } from './suit-color.ts'
+import {Inverse} from '../utils/inverse.js'
+import type {SuitColor} from './suit-color.js'
 
 /** Pip category. */
-export type Suit = Parameters<typeof SuitSet['has']>[0]
+export type Suit = Parameters<(typeof SuitSet)['has']>[0]
 
 export type SuitASCII = 'C' | 'D' | 'H' | 'S'
 
-export const SuitSet = new Set(
-  ['Clubs', 'Diamonds', 'Hearts', 'Spades'] as const,
-)
+export const SuitSet = new Set(<const>['Clubs', 'Diamonds', 'Hearts', 'Spades'])
 
 /**
  * The contiguous [relative ordering] of each suit.
@@ -16,26 +14,25 @@ export const SuitSet = new Set(
  * [relative ordering]: https://en.wikipedia.org/wiki/High_card_by_suit
  */
 export const suitToOrder = [...SuitSet].reduce(
-  (order, value, index) => ({ ...order, [value]: index }),
-  <Readonly<Record<Suit, number>>> {},
+  (order, value, index) => ({...order, [value]: index}),
+  <{readonly [suit in Suit]: number}>{}
 )
 
 /** Order to Suit map. */
-export const suitFromOrder: Readonly<Record<number, Suit>> = Inverse(
-  suitToOrder,
-)
+export const suitFromOrder: {readonly [point: number]: Suit} =
+  Inverse(suitToOrder)
 
 /** The color of each suit. */
-export const suitToColor = {
+export const suitToColor = (<const>{
   Clubs: 'Black',
   Diamonds: 'Red',
   Hearts: 'Red',
-  Spades: 'Black',
-} as const satisfies Record<Suit, SuitColor>
+  Spades: 'Black'
+}) satisfies {[suit in Suit]: SuitColor}
 
-export const suitToASCII = {
+export const suitToASCII = (<const>{
   Clubs: 'C',
   Diamonds: 'D',
   Hearts: 'H',
-  Spades: 'S',
-} as const satisfies Record<Suit, string>
+  Spades: 'S'
+}) satisfies {[suit in Suit]: string}

@@ -2,7 +2,7 @@ export const ideographicSpace = '　'
 
 export function fractionOfIntsChar(
   numerator: number,
-  denominator: number,
+  denominator: number
 ): string {
   const numeratorStr = intToSuperscript(numerator)
   const denominatorStr = intToSubscript(denominator)

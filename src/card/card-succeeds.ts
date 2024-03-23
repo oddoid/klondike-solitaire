@@ -1,4 +1,4 @@
-import { Card } from './card.ts'
+import {Card} from './card.js'
 
 /**
  * Returns true if right card directly succeeds left.
@@ -9,5 +9,5 @@ import { Card } from './card.ts'
  */
 export type CardSucceeds = (
   lhs: Readonly<Card> | undefined,
-  rhs: Readonly<Card> | undefined,
+  rhs: Readonly<Card> | undefined
 ) => boolean

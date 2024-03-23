@@ -4,11 +4,11 @@ Models and functions for playing Klondike Solitaire.
 
 ## Installation
 
-solitaire is a Deno TypeScript project. Add
-`https://deno.land/x/solitaire/mod.ts` to your import modules and reference the
-`https://deno.land/x/solitaire/mods.json` import map.
+```
+npm install --save-dev klondike-solitaire
+```
 
-## License
+## Copyright and License
 
 © oidoid.
 

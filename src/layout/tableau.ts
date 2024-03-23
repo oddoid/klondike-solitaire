@@ -1,10 +1,10 @@
-import { CardSucceeds } from '../card/card-succeeds.ts'
-import { CardVisibility } from '../card/card-visibility.ts'
-import { Card, cardSucceeds } from '../card/card.ts'
-import { rankToOrder } from '../card/rank.ts'
-import { suitToColor } from '../card/suit.ts'
-import { pileToString } from '../utils/card-pile.ts'
-import { CardsSelected } from './cards-selected.ts'
+import type {CardSucceeds} from '../card/card-succeeds.js'
+import type {CardVisibility} from '../card/card-visibility.js'
+import {Card, cardSucceeds} from '../card/card.js'
+import {rankToOrder} from '../card/rank.js'
+import {suitToColor} from '../card/suit.js'
+import {pileToString} from '../utils/card-pile.js'
+import type {CardsSelected} from './cards-selected.js'
 
 /**
  * The playing field consists of a tableau of lanes that can be maneuvered to
@@ -71,7 +71,7 @@ export function tableauDeal(self: Tableau, stock: Card[]): void {
  */
 export function tableauBuild(
   lane: Readonly<Card>[],
-  cards: Readonly<Card>[],
+  cards: Readonly<Card>[]
 ): void {
   if (!tableauIsBuildable(lane, cards)) return
   lane.push(...cards.splice(0))
@@ -79,19 +79,19 @@ export function tableauBuild(
 
 export function tableauSelect(
   self: Readonly<Tableau>,
-  card: Readonly<Card>,
+  card: Readonly<Card>
 ): CardsSelected | undefined {
   for (const [x, lane] of self.entries()) {
     const y = lane.indexOf(card)
     if (y === -1) continue
-    return { cards: lane.splice(y), pile: 'Tableau', xy: { x, y } }
+    return {cards: lane.splice(y), pile: 'Tableau', xy: {x, y}}
   }
 }
 
 /** Test whether a card can be built on tableau lane. */
 export function tableauIsBuildable(
   lane: readonly Readonly<Card>[],
-  cards: readonly Readonly<Card>[],
+  cards: readonly Readonly<Card>[]
 ): boolean {
   if (!cardSucceeds(succeeds, ...cards)) return false
   return succeeds(lane.at(-1), cards[0])
@@ -99,7 +99,7 @@ export function tableauIsBuildable(
 
 export function tableauToString(
   self: Readonly<Tableau>,
-  visibility: CardVisibility = 'Directed',
+  visibility: CardVisibility = 'Directed'
 ): string {
   return pileToString(self, visibility)
 }

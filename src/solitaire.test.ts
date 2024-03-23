@@ -1,204 +1,282 @@
-import { assertAlmostEquals, assertEquals } from 'std/testing/asserts.ts'
-import { assertSnapshot } from 'std/testing/snapshot.ts'
-import { cardToString } from './card/card.ts'
-import { foundationToString } from './layout/foundation.ts'
+import {describe, expect, test} from 'vitest'
+import {cardToString} from './card/card.js'
+import {foundationToString} from './layout/foundation.js'
 import {
-  shuffle,
   Solitaire,
+  shuffle,
   solitaireBuild,
   solitaireDeal,
   solitairePoint,
   solitaireToString,
   swapIndices,
-  uncapitalize,
-} from './solitaire.ts'
+  uncapitalize
+} from './solitaire.js'
 
-Deno.test('Deal', async (test) => {
+describe('Deal', async () => {
   let solitaire: Solitaire
 
-  await test.step(
-    'Set the game.',
-    async (test) => {
-      solitaire = Solitaire(() => 1 - Number.EPSILON)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
-
-  await test.step('The foundation piles are empty.', (test) => {
-    assertEquals(cardToString('Directed', ...solitaire.foundation[0]), '')
-    assertEquals(cardToString('Directed', ...solitaire.foundation[1]), '')
-    assertEquals(cardToString('Directed', ...solitaire.foundation[2]), '')
-    assertEquals(cardToString('Directed', ...solitaire.foundation[3]), '')
-    assertSnapshot(test, foundationToString(solitaire.foundation, 'Directed'), {
-      dir: '.',
-    })
+  test('Set the game.', () => {
+    solitaire = Solitaire(() => 1 - Number.EPSILON)
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂠🂠🂠🂠🂠🂠🂠
+      　🂠🂠🂠🂠🂠🂠
+      　　🂠🂠🂠🂠🂠
+      　　　🂠🂠🂠🂠
+      　　　　🂠🂠🂠
+      　　　　　🂠🂠
+      　　　　　　🂠
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
   })
 
-  await test.step('The waste is empty.', () => {
-    assertEquals(solitaire.waste.length, 0)
+  test('The foundation piles are empty.', () => {
+    expect(cardToString('Directed', ...solitaire.foundation[0])).toBe('')
+    expect(cardToString('Directed', ...solitaire.foundation[1])).toBe('')
+    expect(cardToString('Directed', ...solitaire.foundation[2])).toBe('')
+    expect(cardToString('Directed', ...solitaire.foundation[3])).toBe('')
+    expect(
+      foundationToString(solitaire.foundation, 'Directed')
+    ).toMatchInlineSnapshot(`"🃟🃟🃟🃟"`)
   })
 
-  await test.step(
-    'Deal.',
-    async (test) => {
-      solitaireDeal(solitaire)
-      await assertSnapshot(test, solitaireToString(solitaire, 'Undirected'), {
-        dir: '.',
-      })
-    },
-  )
+  test('The waste is empty.', () => {
+    expect(solitaire.waste.length).toBe(0)
+  })
 
-  await test.step('The stock is dealt into the tableau.', () => {
-    assertEquals(
-      cardToString('Directed', ...solitaire.stock),
+  test('Deal.', () => {
+    solitaireDeal(solitaire)
+    expect(solitaireToString(solitaire, 'Undirected')).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂫🂨🂤🂽🂶🃍
+      　🂭🂩🂥🂾🂷🃎
+      　　🂪🂦🂡🂸🂱
+      　　　🂧🂢🂹🂲
+      　　　　🂣🂺🂳
+      　　　　　🂻🂴
+      　　　　　　🂵
+      🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋 🃟 🃟"
+    `)
+  })
+
+  test('The stock is dealt into the tableau.', () => {
+    expect(cardToString('Directed', ...solitaire.stock)).toBe(
       // 🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞   🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋
-      '🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠' + '🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠',
+      '🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠' + '🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠'
     )
-    assertEquals(
-      solitaire.tableau.map((pile) => cardToString('Directed', ...pile)),
-      [
-        '🂠', //       🂮
-        '🂠🂠', //      🂫🂭
-        '🂠🂠🂠', //     🂨🂩🂪
-        '🂠🂠🂠🂠', //    🂤🂥🂦🂧
-        '🂠🂠🂠🂠🂠', //   🂽🂾🂡🂢🂣
-        '🂠🂠🂠🂠🂠🂠', //  🂶🂷🂸🂹🂺🂻
-        '🂠🂠🂠🂠🂠🂠🂠', // 🃍🃎🂱🂲🂳🂴🂵
-      ],
-    )
+    expect(
+      solitaire.tableau.map(pile => cardToString('Directed', ...pile))
+    ).toStrictEqual([
+      '🂠', //       🂮
+      '🂠🂠', //      🂫🂭
+      '🂠🂠🂠', //     🂨🂩🂪
+      '🂠🂠🂠🂠', //    🂤🂥🂦🂧
+      '🂠🂠🂠🂠🂠', //   🂽🂾🂡🂢🂣
+      '🂠🂠🂠🂠🂠🂠', //  🂶🂷🂸🂹🂺🂻
+      '🂠🂠🂠🂠🂠🂠🂠' // 🃍🃎🂱🂲🂳🂴🂵
+    ])
   })
 
-  await test.step(
-    'Draw all.',
-    async (test) => {
-      while (solitaire.stock.length > 0) {
-        solitairePoint(solitaire, solitaire.stock.at(-1)!)
-        await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-      }
-    },
-  )
+  test('Draw all.', () => {
+    while (solitaire.stock.length > 0) {
+      solitairePoint(solitaire, solitaire.stock.at(-1)!)
+      expect(solitaireToString(solitaire)).toMatchSnapshot()
+    }
+  })
 
-  await test.step(
-    'Redeal.',
-    async (test) => {
-      solitaireDeal(solitaire)
-      await assertSnapshot(test, solitaireToString(solitaire, 'Undirected'), {
-        dir: '.',
-      })
-    },
-  )
+  test('Redeal.', () => {
+    solitaireDeal(solitaire)
+    expect(solitaireToString(solitaire, 'Undirected')).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂫🂨🂤🂽🂶🃍
+      　🂭🂩🂥🂾🂷🃎
+      　　🂪🂦🂡🂸🂱
+      　　　🂧🂢🂹🂲
+      　　　　🂣🂺🂳
+      　　　　　🂻🂴
+      　　　　　　🂵
+      🃑🃒🃓🃔🃕🃖🃗🃘🃙🃚🃛🃝🃞🃁🃂🃃🃄🃅🃆🃇🃈🃉🃊🃋 🃟 🃟"
+    `)
+  })
 
-  await test.step(
-    'Draw all.',
-    async (test) => {
-      while (solitaire.stock.length > 0) {
-        solitairePoint(solitaire, solitaire.stock.at(-1)!)
-        await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-      }
-    },
-  )
+  test('Draw all.', () => {
+    while (solitaire.stock.length > 0) {
+      solitairePoint(solitaire, solitaire.stock.at(-1)!)
+      expect(solitaireToString(solitaire)).toMatchSnapshot()
+    }
+  })
 })
 
-Deno.test('Playthrough', async (test) => {
-  let solitaire!: Solitaire
-  await test.step(
-    'Set the game.',
-    async (test) => {
-      solitaire = Solitaire(() => 1 - Number.EPSILON, 0, 3, 7)
-      solitaireDeal(solitaire)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+describe('Playthrough', () => {
+  const solitaire = Solitaire(() => 1 - Number.EPSILON, 0, 3, 7)
+  solitaireDeal(solitaire)
+
+  test('Set the game.', () => {
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂠🂠🂠🂠🂠🂠🂠
+      　🂠🂠🂠🂠🂠🂠
+      　　🂠🂠🂠🂠🂠
+      　　　🂠🂠🂠🂠
+      　　　　🂠🂠🂠
+      　　　　　🂠🂠
+      　　　　　　🂠
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
+  })
 
   for (const [index, column] of solitaire.tableau.entries()) {
-    await test.step(
-      `Reveal tableau pile ${index}.`,
-      async (test) => {
-        solitairePoint(solitaire, column.at(-1)!)
-        await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-      },
-    )
+    test(`Reveal tableau pile ${index}.`, () => {
+      solitairePoint(solitaire, column.at(-1)!)
+      expect(solitaireToString(solitaire)).toMatchSnapshot()
+    })
   }
 
-  await test.step(
-    'Take the ten of spades from tableau 2, top.',
-    async (test) => {
-      solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Take the ten of spades from tableau 2, top.', () => {
+    solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭🂠🂠🂠🂠🂠
+      　　　🂠🂠🂠🂠
+      　　　🂧🂠🂠🂠
+      　　　　🂣🂠🂠
+      　　　　　🂻🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟
+      🂪 from Tableau (2, 2)"
+    `)
+  })
 
-  await test.step(
-    'Put onto the jack of hearts at tableau 5.',
-    async (test) => {
-      solitaireBuild(solitaire, { type: 'Tableau', x: 5 })
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Put onto the jack of hearts at tableau 5.', () => {
+    solitaireBuild(solitaire, {type: 'Tableau', x: 5})
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭🂠🂠🂠🂠🂠
+      　　　🂠🂠🂠🂠
+      　　　🂧🂠🂠🂠
+      　　　　🂣🂠🂠
+      　　　　　🂻🂠
+      　　　　　🂪🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
+  })
 
-  await test.step(
-    'Take the the jack of hearts at tableau 5, top.',
-    async (test) => {
-      solitairePoint(solitaire, solitaire.tableau[5]!.at(-2)!)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Take the the jack of hearts at tableau 5, top.', () => {
+    solitairePoint(solitaire, solitaire.tableau[5]!.at(-2)!)
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭🂠🂠🂠🂠🂠
+      　　　🂠🂠🂠🂠
+      　　　🂧🂠🂠🂠
+      　　　　🂣🂠🂠
+      　　　　　　🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟
+      🂻🂪 from Tableau (5, 5)"
+    `)
+  })
 
-  await test.step(
-    'Put onto the queen of spades at tableau 1.',
-    async (test) => {
-      solitaireBuild(solitaire, { type: 'Tableau', x: 1 })
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Put onto the queen of spades at tableau 1.', () => {
+    solitaireBuild(solitaire, {type: 'Tableau', x: 1})
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭🂠🂠🂠🂠🂠
+      　🂻　🂠🂠🂠🂠
+      　🂪　🂧🂠🂠🂠
+      　　　　🂣🂠🂠
+      　　　　　　🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
+  })
 
-  await test.step(
-    'Reveal tableau pile 2.',
-    async (test) => {
-      solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Reveal tableau pile 2.', () => {
+    solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭🂩🂠🂠🂠🂠
+      　🂻　🂠🂠🂠🂠
+      　🂪　🂧🂠🂠🂠
+      　　　　🂣🂠🂠
+      　　　　　　🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
+  })
 
-  await test.step(
-    'Reveal tableau pile 5.',
-    async (test) => {
-      solitairePoint(solitaire, solitaire.tableau[5]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Reveal tableau pile 5.', () => {
+    solitairePoint(solitaire, solitaire.tableau[5]!.at(-1)!)
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭🂩🂠🂠🂠🂠
+      　🂻　🂠🂠🂠🂠
+      　🂪　🂧🂠🂠🂠
+      　　　　🂣🂺🂠
+      　　　　　　🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
+  })
 
-  await test.step(
-    'Take the the nine of spades at tableau 2, top.',
-    async (test) => {
-      solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Take the the nine of spades at tableau 2, top.', () => {
+    solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭　🂠🂠🂠🂠
+      　🂻　🂠🂠🂠🂠
+      　🂪　🂧🂠🂠🂠
+      　　　　🂣🂺🂠
+      　　　　　　🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟
+      🂩 from Tableau (2, 1)"
+    `)
+  })
 
-  await test.step(
-    'Put onto the ten of hearts at tableau 1.',
-    async (test) => {
-      solitaireBuild(solitaire, { type: 'Tableau', x: 5 })
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Put onto the ten of hearts at tableau 1.', () => {
+    solitaireBuild(solitaire, {type: 'Tableau', x: 5})
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂠🂠🂠🂠🂠
+      　🂭　🂠🂠🂠🂠
+      　🂻　🂠🂠🂠🂠
+      　🂪　🂧🂠🂠🂠
+      　　　　🂣🂺🂠
+      　　　　　🂩🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
+  })
 
-  await test.step(
-    'Reveal tableau pile 2.',
-    async (test) => {
-      solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
-      await assertSnapshot(test, solitaireToString(solitaire), { dir: '.' })
-    },
-  )
+  test('Reveal tableau pile 2.', () => {
+    solitairePoint(solitaire, solitaire.tableau[2]!.at(-1)!)
+    expect(solitaireToString(solitaire)).toMatchInlineSnapshot(`
+      "🃟🃟🃟🃟
+      🂮🂠🂨🂠🂠🂠🂠
+      　🂭　🂠🂠🂠🂠
+      　🂻　🂠🂠🂠🂠
+      　🂪　🂧🂠🂠🂠
+      　　　　🂣🂺🂠
+      　　　　　🂩🂠
+      　　　　　　🂵
+      🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠🂠 🃟 🃟"
+    `)
+  })
 })
 
-Deno.test('Shuffle: permutations.', () => {
+test('Shuffle: permutations.', () => {
   const iterations = 1_000_000
   const array = ['a', 'b', 'c', 'd', 'e']
-  const permutations = permute(array).map((permutation) => permutation.join(''))
+  const permutations = permute(array).map(permutation => permutation.join(''))
 
-  const distribution: Record<string, number> = {}
+  const distribution: {[letter: string]: number} = {}
   for (let i = 0; i < iterations; i++) {
     shuffle(array, Math.random)
     const permutation = array.join('')
@@ -209,22 +287,22 @@ Deno.test('Shuffle: permutations.', () => {
   for (const permutation of permutations) {
     const occurrences = distribution[permutation] ?? 0
     const frequency = occurrences / iterations
-    assertAlmostEquals(frequency, 1 / permutations.length, 0.001)
+    expect(frequency).toBeCloseTo(1 / permutations.length, 0.001)
   }
 })
 
-Deno.test('Shuffle: no randomization.', () => {
+test('Shuffle: no randomization.', () => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz'
   const letters = [...alphabet]
   shuffle(letters, () => 1 - Number.EPSILON)
-  assertEquals(letters.join(''), alphabet)
+  expect(letters.join('')).toBe(alphabet)
 })
 
 /** [Heap's_algorithm](https://en.wikipedia.org/wiki/Heap%27s_algorithm). */
 function permute<T>(array: T[], n: number = array.length): T[][] {
   if (n === 1) return [[...array]]
 
-  const permutations = []
+  const permutations: T[][] = []
   permutations.push(...permute(array, n - 1))
 
   for (let i = 0; i < n - 1; i++) {
@@ -236,21 +314,19 @@ function permute<T>(array: T[], n: number = array.length): T[][] {
   return permutations
 }
 
-Deno.test('Str', async (test) => {
-  for (
-    const [str, uncapitalized] of [
-      ['', ''],
-      [' ', ' '],
-      ['\t', '\t'],
-      ['\n', '\n'],
-      ['   ', '   '],
-      ['a', 'a'],
-      ['A', 'a'],
-      ['abc', 'abc'],
-      ['ABC', 'aBC'],
-    ] as const
-  ) {
-    await test.step(`strUncapitalize(${str}) => ${uncapitalized}`, () =>
-      assertEquals(uncapitalize(str), uncapitalized))
+describe('Str', () => {
+  for (const [str, uncapitalized] of <const>[
+    ['', ''],
+    [' ', ' '],
+    ['\t', '\t'],
+    ['\n', '\n'],
+    ['   ', '   '],
+    ['a', 'a'],
+    ['A', 'a'],
+    ['abc', 'abc'],
+    ['ABC', 'aBC']
+  ]) {
+    test(`strUncapitalize(${str}) => ${uncapitalized}`, () =>
+      expect(uncapitalize(str)).toBe(uncapitalized))
   }
 })
