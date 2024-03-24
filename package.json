@@ -23,6 +23,7 @@
     "game"
   ],
   "license": "AGPL-3.0-only",
+  "main": "dist/src/index.js",
   "name": "klondike-solitaire",
   "prettier": {
     "arrowParens": "avoid",
@@ -50,6 +51,6 @@
     "version": "npm test"
   },
   "type": "module",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "version": "0.1.0-0"
 }
